@@ -134,19 +134,19 @@ const games: Game[] = [
 const vendorTabs = ["전체", ...Array.from(new Set(games.map((game) => game.publisher)))];
 const vendorNotes: Record<string, string> = {
   "전체": "공유 시트에 정리된 참가 업체와 공개 신작·대표작을 한곳에서 살펴보세요.",
-  "만두게임즈": "공식 부스 포스터 기준: 파티·캐주얼·명작 게임 14종의 신작 체험 라인업입니다. 현장 운영은 변동될 수 있습니다.",
-  "코리아보드게임즈": "가족·파티·협력까지 폭넓게 체험할 수 있는 신작 부스입니다.",
-  "보드피아": "전략 확장과 테마 신작을 중심으로 구성된 부스입니다.",
-  "아스모디": "2인 대전과 확장·후속작 라인업을 확인하세요.",
-  "보드엠": "플라워즈, P.I., 테이크 타임 등 7월 신작 체험 라인업입니다.",
-  "MTS": "전략·2인 게임을 중심으로 대표작을 소개합니다.",
-  "데블다이스": "데드 바이 데이라이트 관련 현장 공개를 확인하세요.",
-  "게임올로지": "공간 퍼즐과 2인 카드게임을 선보입니다.",
-  "보드붐": "짧은 라운드의 가족·파티 게임을 즐길 수 있습니다.",
-  "매직빈게임즈": "추상전략 중심의 2인·가족 게임 라인업입니다.",
+  "만두게임즈": "로고 뱃지 이벤트와 7월 18일 카르디아 대회가 진행됩니다. 야생의 수호자들은 대회 4강 상품으로 안내된 출시 예정 확장입니다.",
+  "코리아보드게임즈": "신작 체험·리뷰 이벤트와 18~19일 보드게임 대회가 안내돼 있습니다. 공식 부스 공지를 함께 확인하세요.",
+  "보드피아": "세티: 우주 기관·엠버하트·죄악의 카니발을 보드게임콘 출시작으로 소개합니다.",
+  "아스모디": "출시 특가·구매 수량별 할인·타임 특가와 아스모 플레이: 드제코 챌린지가 진행됩니다. 온라인콘 출시작은 현장 출시와 구분해 표기했습니다.",
+  "보드엠": "신작 할인·체험·챌린지·뽑기 이벤트와 7월 19일 파러웨이 챔피언십이 안내돼 있습니다.",
+  "MTS": "신작 할인·구매 사은품·한정 프로모션, 에이전트 애비뉴·카르누타 본선 및 미스터리 스퀘어 협업이 안내돼 있습니다.",
+  "데블다이스": "데드 바이 데이라이트 빅박스를 현장에서 첫 공개합니다. 할인 판매와 럭키드로우도 진행됩니다.",
+  "게임올로지": "펜쏠로지와 네뷸라 컬러스를 포함한 공간 퍼즐·2인 게임 라인업입니다.",
+  "보드붐": "전 제품 35% 할인과 《스퀘어 메이커》 Coming Soon 안내가 게시돼 있습니다.",
+  "매직빈게임즈": "7월 18일 첫 공식 오목체스 대회와 대회 연계 50% 할인, 신·구작 현장 할인이 진행됩니다.",
   "조엔": "휴대하기 좋은 손기술 가족 게임을 소개합니다.",
-  "놀이속의세상": "세대가 함께 즐기는 클래식 게임 부스입니다.",
-  "옐로우스타게임즈": "엔진빌딩과 노선 운영 전략게임을 확인하세요.",
+  "놀이속의세상": "7월 19일 루미큐브 초등부·일반부 대회가 안내돼 있으며, 두 부문 모두 접수 마감 상태입니다.",
+  "옐로우스타게임즈": "엔진빌딩과 노선 운영 전략게임을 확인하세요. 온라인 행사 공개작과 현장 라인업은 구분해 확인이 필요합니다.",
 };
 const vendorLinks: Record<string, { label: string; url: string }> = {
   "만두게임즈": { label: "공식 부스 소개 ↗", url: mandooSource },
@@ -191,6 +191,7 @@ export default function Home() {
   const selectVendor = (vendor: string) => { setSelectedVendor(vendor); setFilter("전체"); const first = games.find((game) => vendor === "전체" || game.publisher === vendor); if (first) setSelectedGame(first); document.querySelector("#vendors")?.scrollIntoView({ behavior: "smooth", block: "start" }); };
 
   return <main>
+    <section className="vendor-info-index" aria-label="업체별 행사 정보"><p className="mono">BOOTH EVENT NOTES / BOARDLIFE CURATED</p><div>{Object.entries(vendorNotes).filter(([vendor]) => vendor !== "전체").map(([vendor, note]) => <article key={vendor}><h2>{vendor}</h2><p>{note}</p><button onClick={() => selectVendor(vendor)}>게임 보기 ↗</button></article>)}</div></section>
     <header className="nav"><a className="brand" href="#top">BGC<span>26</span></a><nav><a href="#map">MAP</a><div className="vendor-menu"><a href="#vendors">참가 업체 <span>↓</span></a><div className="vendor-menu-panel">{vendorTabs.filter((vendor) => vendor !== "전체").map((vendor) => <button key={vendor} onClick={() => selectVendor(vendor)}>{vendor}<small>{games.filter((game) => game.publisher === vendor).length} GAMES</small></button>)}</div></div></nav><a className="nav-link" href="https://www.boardgamecon.com/" target="_blank" rel="noreferrer">OFFICIAL ↗</a></header>
     <section className="hero" id="top"><div className="hero-copy"><p className="mono">2026 BOARDGAMECON / SEOUL</p><h1>올해의 판을<br/>고르세요<span className="dot">.</span></h1><p className="hero-description">한눈에 보는 부스, 신작, 그리고<br/>테이블 위에서 시작될 이야기.</p><div className="hero-meta mono"><span>07.16 — 07.19</span><span>10:00 — 18:00</span><span>COEX B1 · SEOUL</span></div></div><div className="hero-number" aria-hidden="true">26</div></section>
     <section className="info-strip"><span className="mono">FREE ADMISSION</span><span>전 연령 · 전시 & 체험 · 대회 · 작가존</span><a href="http://www.boardgamecon.com/" target="_blank" rel="noreferrer">행사 정보 ↗</a></section>
