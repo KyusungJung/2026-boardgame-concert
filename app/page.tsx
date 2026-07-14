@@ -25,11 +25,14 @@ const sheetGame = (
   status: Game["status"] = "콘 신작",
   type: Game["type"] = "가족",
   weight: Game["weight"] = "가볍게",
-) : Game => ({ title, publisher, description, status, type, weight, players: "현장 안내", time: "현장 안내", audience: "공유 시트의 공개 라인업을 확인하려는 방문객", video: `${title} 보드게임` });
+  source?: string,
+) : Game => ({ title, publisher, description, status, type, weight, players: "현장 안내", time: "현장 안내", audience: "공유 시트의 공개 라인업을 확인하려는 방문객", video: `${title} 보드게임`, source });
+
+const mandooSource = "https://www.instagram.com/p/Daui3XXE4IF/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==";
 
 const games: Game[] = [
-  { title: "컴파일", publisher: "만두게임즈", type: "2인", weight: "적당히", players: "2인", time: "20–30분", status: "대표작", description: "AI 테마 덱으로 세 전선을 두고 겨루는 카드 전략전. 높은 카드는 인장, 낮은 카드는 능력으로 쓰는 선택이 핵심입니다.", audience: "짧고 치열한 2인전을 찾는 사람", video: "컴파일 보드게임", image: "/covers/compile-release.png", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16263" },
-  { title: "카르디아", publisher: "만두게임즈", type: "2인", weight: "적당히", players: "2인", time: "20분", status: "대표작", description: "동시 공개한 카드의 높낮이에 따라 인장 획득과 카드 능력이 갈리는 심리전입니다.", audience: "블러핑과 심리전을 좋아하는 2인", video: "카르디아 보드게임", image: "/covers/cardia.png" },
+  { title: "컴파일", publisher: "만두게임즈", type: "2인", weight: "적당히", players: "2인", time: "20–30분", status: "대표작", description: "AI 테마 덱으로 세 전선을 두고 겨루는 카드 전략전. 높은 카드는 인장, 낮은 카드는 능력으로 쓰는 선택이 핵심입니다.", audience: "짧고 치열한 2인전을 찾는 사람", video: "컴파일 보드게임", image: "/covers/compile-release.png", source: mandooSource },
+  { title: "카르디아", publisher: "만두게임즈", type: "2인", weight: "적당히", players: "2인", time: "20분", status: "대표작", description: "동시 공개한 카드의 높낮이에 따라 인장 획득과 카드 능력이 갈리는 심리전입니다.", audience: "블러핑과 심리전을 좋아하는 2인", video: "카르디아 보드게임", image: "/covers/cardia.png", source: mandooSource },
   { title: "꼬치의 달인", publisher: "만두게임즈", type: "파티", weight: "가볍게", players: "2–4인", time: "10분", status: "대표작", description: "주문 카드와 같은 꼬치를 먼저 완성하는 실시간 순발력 게임입니다.", audience: "바로 꺼내 웃을 수 있는 게임을 찾는 모임", video: "꼬치의 달인 보드게임" },
   { title: "두냐자드의 모험", publisher: "코리아보드게임즈", type: "협력", weight: "가볍게", players: "2–5인", time: "15분", status: "콘 신작", description: "90초 안에 이야기와 맞는 타일을 함께 찾아내는 실시간 협력 어드벤처입니다.", audience: "가족·입문자 협력 플레이", video: "두냐자드의 모험 보드게임", image: "/covers/kbg-release.webp", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16273" },
   { title: "새우깡 보드게임", publisher: "코리아보드게임즈", type: "가족", weight: "가볍게", players: "2–4인", time: "10분", status: "콘 신작", description: "새우깡을 활용해 간단하게 즐기는 카드게임입니다.", audience: "어린이와 가볍게 즐길 가족", video: "새우깡 보드게임", image: "/covers/kbg-release.webp", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16273" },
@@ -58,13 +61,18 @@ const games: Game[] = [
   { title: "어스", publisher: "옐로우스타게임즈", type: "전략", weight: "적당히", players: "1–5인", time: "45–90분", status: "대표작", description: "식물과 서식지 카드로 생태계 엔진을 구축하는 전략게임입니다.", audience: "카드 콤보를 키워 가는 엔진빌딩 팬", video: "어스 보드게임" },
   { title: "터미너스", publisher: "옐로우스타게임즈", type: "전략", weight: "적당히", players: "1–5인", time: "60–90분", status: "대표작", description: "지하철 노선을 건설하고 승객을 운송하는 전략게임입니다.", audience: "노선 연결과 운영 퍼즐을 좋아하는 사람", video: "터미너스 보드게임" },
   // Google 공유 시트(7월 보드게임 콘 정보)의 업체별 신작·대표작 전체 반영
-  sheetGame("치킨vs핫도그", "만두게임즈", "덱스터리티 요소를 살린 파티게임입니다.", "콘 신작", "파티"),
-  sheetGame("태플", "만두게임즈", "단어를 빠르게 떠올려 답하는 폭탄 돌리기 게임입니다.", "콘 신작", "파티"),
-  sheetGame("타코 쿠션 고트 치즈 피자", "만두게임즈", "《타코캣고트치즈피자》에 쿠션을 더한 순발력 파티게임입니다.", "콘 신작", "파티"),
-  sheetGame("빙뱅붐", "만두게임즈", "《타코캣고트치즈피자》 계열의 빠른 반응 게임입니다.", "콘 신작", "파티"),
-  sheetGame("고양이를 조심해!", "만두게임즈", "가볍게 즐길 수 있는 라이트 게임입니다."),
-  sheetGame("고빅", "만두게임즈", "운을 밀어붙이는 푸시 유어 럭 카드게임입니다.", "콘 신작", "파티"),
-  sheetGame("17다이스벳", "만두게임즈", "주사위를 굴리고 베팅하는 게임입니다.", "콘 신작", "파티"),
+  sheetGame("치킨vs핫도그", "만두게임즈", "공식 부스 포스터의 ‘텐션 UP! 요즘 핫한 파티 게임’ 체험작입니다.", "콘 신작", "파티", "가볍게", mandooSource),
+  sheetGame("태플", "만두게임즈", "공식 부스 포스터의 ‘텐션 UP! 요즘 핫한 파티 게임’ 체험작입니다.", "콘 신작", "파티", "가볍게", mandooSource),
+  sheetGame("타코 쿠션 고트 치즈 피자", "만두게임즈", "공식 부스 포스터의 ‘텐션 UP! 요즘 핫한 파티 게임’ 체험작입니다.", "콘 신작", "파티", "가볍게", mandooSource),
+  sheetGame("루쿠스", "만두게임즈", "공식 부스 포스터의 ‘텐션 UP! 요즘 핫한 파티 게임’ 체험작입니다.", "현장 공개", "파티", "가볍게", mandooSource),
+  sheetGame("빙뱅붐", "만두게임즈", "공식 부스 포스터의 ‘텐션 UP! 요즘 핫한 파티 게임’ 체험작입니다.", "콘 신작", "파티", "가볍게", mandooSource),
+  sheetGame("고양이를 조심해!", "만두게임즈", "공식 부스 포스터의 ‘간단한데 재밌다! 캐주얼 게임’ 체험작입니다.", "현장 공개", "가족", "가볍게", mandooSource),
+  sheetGame("고빅", "만두게임즈", "공식 부스 포스터의 ‘간단한데 재밌다! 캐주얼 게임’ 체험작입니다.", "콘 신작", "가족", "가볍게", mandooSource),
+  sheetGame("냠냠냠", "만두게임즈", "공식 부스 포스터의 ‘간단한데 재밌다! 캐주얼 게임’ 체험작입니다.", "현장 공개", "가족", "가볍게", mandooSource),
+  sheetGame("아브라냥다브라", "만두게임즈", "공식 부스 포스터의 ‘간단한데 재밌다! 캐주얼 게임’ 체험작입니다.", "현장 공개", "가족", "가볍게", mandooSource),
+  sheetGame("보츠와나", "만두게임즈", "공식 부스 포스터의 ‘간단한데 재밌다! 캐주얼 게임’ 체험작입니다.", "현장 공개", "가족", "가볍게", mandooSource),
+  sheetGame("사그라다", "만두게임즈", "공식 부스 포스터의 ‘퀄리티 갑! 명작 게임’ 체험작입니다.", "대표작", "전략", "적당히", mandooSource),
+  sheetGame("17 다이스 벳", "만두게임즈", "공식 부스 포스터의 ‘퀄리티 갑! 명작 게임’ 체험작입니다. 현장 운영 게임은 상황에 따라 달라질 수 있습니다.", "현장 공개", "전략", "적당히", mandooSource),
   sheetGame("판다판다", "코리아보드게임즈", "가볍게 즐기는 카드게임입니다."),
   sheetGame("소다러브", "코리아보드게임즈", "가볍게 즐기는 카드게임입니다."),
   sheetGame("멍상블", "코리아보드게임즈", "가볍게 즐기는 카드게임입니다."),
@@ -122,7 +130,7 @@ const games: Game[] = [
 const vendorTabs = ["전체", ...Array.from(new Set(games.map((game) => game.publisher)))];
 const vendorNotes: Record<string, string> = {
   "전체": "공유 시트에 정리된 참가 업체와 공개 신작·대표작을 한곳에서 살펴보세요.",
-  "만두게임즈": "컴파일과 카드 게임 중심의 라인업을 확인하세요.",
+  "만두게임즈": "공식 부스 포스터 기준: 파티·캐주얼·명작 게임 14종의 신작 체험 라인업입니다. 현장 운영은 변동될 수 있습니다.",
   "코리아보드게임즈": "가족·파티·협력까지 폭넓게 체험할 수 있는 신작 부스입니다.",
   "보드피아": "전략 확장과 테마 신작을 중심으로 구성된 부스입니다.",
   "아스모디": "2인 대전과 확장·후속작 라인업을 확인하세요.",
@@ -137,13 +145,21 @@ const vendorNotes: Record<string, string> = {
   "옐로우스타게임즈": "엔진빌딩과 노선 운영 전략게임을 확인하세요.",
 };
 const vendorLinks: Record<string, { label: string; url: string }> = {
-  "만두게임즈": { label: "공식 부스 소개 ↗", url: "https://www.instagram.com/p/Daui3XXE4IF/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+  "만두게임즈": { label: "공식 부스 소개 ↗", url: mandooSource },
   "코리아보드게임즈": { label: "공식 부스 소개 ↗", url: "https://www.koreaboardgames.com/magazine/menuDetail?boardCd=news&postNo=874" },
   "보드피아": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16270" },
   "보드엠": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16271" },
   "아스모디": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16288" },
   "MTS": { label: "공유 시트 라인업 ↗", url: "https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" },
   "행복한 바오밥": { label: "공유 시트 라인업 ↗", url: "https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" },
+};
+const vendorFeatures: Record<string, { image: string; title: string; description: string; source: string }> = {
+  "만두게임즈": {
+    image: "/covers/mandoo-booth-lineup-2026.jpg",
+    title: "공식 신작 체험 라인업",
+    description: "도파민 폭발 신작부터 베스트셀러 파티 게임까지. 공식 게시물에 표시된 14종의 체험 게임을 분류별로 확인하세요.",
+    source: mandooSource,
+  },
 };
 const mapBooths = [
   ["만두게임즈", "map-mandoo"], ["코리아보드게임즈", "map-kbg"], ["언더독게임즈", "map-underdog"], ["보드피아", "map-boardpia"],
@@ -165,7 +181,7 @@ export default function Home() {
     <section className="hero" id="top"><div className="hero-copy"><p className="mono">2026 BOARDGAMECON / SEOUL</p><h1>올해의 판을<br/>고르세요<span className="dot">.</span></h1><p className="hero-description">한눈에 보는 부스, 신작, 그리고<br/>테이블 위에서 시작될 이야기.</p><div className="hero-meta mono"><span>07.16 — 07.19</span><span>10:00 — 18:00</span><span>COEX B1 · SEOUL</span></div></div><div className="hero-number" aria-hidden="true">26</div></section>
     <section className="info-strip"><span className="mono">FREE ADMISSION</span><span>전 연령 · 전시 & 체험 · 대회 · 작가존</span><a href="https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=69141" target="_blank" rel="noreferrer">행사 정보 ↗</a></section>
     <section className="map-section" id="map"><div className="map-panel"><div className="map-label mono">COEX EXHIBITION HALL B1 / SHEET VERIFIED BOOTH MAP</div><div className="hall"><div className="hall-note mono">← WEST HALL</div><div className="entrance">ENTRANCE →</div>{mapBooths.map(([vendor, position]) => <button className={`booth ${position}`} onClick={() => selectVendor(vendor)} key={vendor} aria-label={`${vendor} 탭 보기`}>{vendor === "코리아보드게임즈" ? <>코리아<br/>보드게임즈</> : vendor}</button>)}<div className="booth map-mimi">미미월드</div><div className="booth map-raccoon">라쿤펀치<br/>피스크래프트</div><div className="booth map-boardboom-side">보드붐</div><div className="booth map-creators">작가존 · 캐릭터 라이선싱 페어</div><div className="map-legend"><i></i> 클릭: 업체 탭 이동 <span>·</span> <b></b> 도면상 동반 부스</div></div><div className="map-note"><p>공유 시트와 현장 도면 기준으로 재배치했습니다. <strong>파란 블록</strong>을 클릭하면 해당 업체 게임을 바로 볼 수 있습니다.</p><button onClick={() => selectVendor("전체")}>전체 라인업 보기 <span>↓</span></button></div></div></section>
-    <section className="vendors-section" id="vendors"><div className="vendor-content"><div className="game-tools"><div className="filter-row">{["전체", "파티", "가족", "협력", "추리", "2인", "전략"].map((item) => <button className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}</div><label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`${selectedVendor} 게임명 검색`} aria-label="게임명 검색" /></label></div><div className="selection-row"><p className="selection-label"><span className="mono">NOW VIEWING</span> {selectedVendor} <em>{filtered.length} GAMES</em></p>{vendorLinks[selectedVendor] && <a className="vendor-source" href={vendorLinks[selectedVendor].url} target="_blank" rel="noreferrer">{vendorLinks[selectedVendor].label}</a>}</div><div className="game-cards">{filtered.map((game) => <article className={`game-card ${selectedGame.title === game.title ? "selected" : ""}`} key={`${game.publisher}-${game.title}`}>{game.image && <button className="game-cover" onClick={() => setSelectedGame(game)} aria-label={`${game.title} 상세 보기`}><img src={game.image} alt={`${game.title} 출시 이미지`} /></button>}<button className="game-card-main" onClick={() => setSelectedGame(game)}><span className="mono">{game.status}</span><h3>{game.title}</h3><p>{game.description}</p><div><b>{game.type}</b><b>{game.weight}</b><span>{game.players} · {game.time}</span></div></button>{game.source && <a href={game.source} target="_blank" rel="noreferrer">사진·출시 공지 보기 ↗</a>}</article>)}</div></div></section>
+    <section className="vendors-section" id="vendors"><div className="vendor-content"><div className="game-tools"><div className="filter-row">{["전체", "파티", "가족", "협력", "추리", "2인", "전략"].map((item) => <button className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}</div><label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`${selectedVendor} 게임명 검색`} aria-label="게임명 검색" /></label></div><div className="selection-row"><p className="selection-label"><span className="mono">NOW VIEWING</span> {selectedVendor} <em>{filtered.length} GAMES</em></p>{vendorLinks[selectedVendor] && <a className="vendor-source" href={vendorLinks[selectedVendor].url} target="_blank" rel="noreferrer">{vendorLinks[selectedVendor].label}</a>}</div>{vendorFeatures[selectedVendor] && <aside className="vendor-feature"><a href={vendorFeatures[selectedVendor].source} target="_blank" rel="noreferrer"><img src={vendorFeatures[selectedVendor].image} alt={`${selectedVendor} ${vendorFeatures[selectedVendor].title} 포스터`} /></a><div><span className="mono">OFFICIAL BOOTH POST</span><h2>{vendorFeatures[selectedVendor].title}</h2><p>{vendorFeatures[selectedVendor].description}</p><a href={vendorFeatures[selectedVendor].source} target="_blank" rel="noreferrer">만두게임즈 원문 보기 ↗</a></div></aside>}<div className="game-cards">{filtered.map((game) => <article className={`game-card ${selectedGame.title === game.title ? "selected" : ""}`} key={`${game.publisher}-${game.title}`}>{game.image && <button className="game-cover" onClick={() => setSelectedGame(game)} aria-label={`${game.title} 상세 보기`}><img src={game.image} alt={`${game.title} 출시 이미지`} /></button>}<button className="game-card-main" onClick={() => setSelectedGame(game)}><span className="mono">{game.status}</span><h3>{game.title}</h3><p>{game.description}</p><div><b>{game.type}</b><b>{game.weight}</b><span>{game.players} · {game.time}</span></div></button>{game.source && <a href={game.source} target="_blank" rel="noreferrer">사진·출시 공지 보기 ↗</a>}</article>)}</div></div></section>
     <footer><a className="brand" href="#top">BGC<span>26</span></a><p>업체·신작 정보는 2026.07.14 Google 공유 시트와 Boardlife 공개 정리를 기준으로 업데이트했습니다.<br/>방문 전 공식 홈페이지에서 최신 공지를 확인하세요.</p><div><a href="https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" target="_blank" rel="noreferrer">GOOGLE SHEET ↗</a><a href="https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78795" target="_blank" rel="noreferrer">BOARDLIFE SOURCE ↗</a><a href="https://www.boardgamecon.com/" target="_blank" rel="noreferrer">OFFICIAL ↗</a></div></footer>
   </main>;
 }
