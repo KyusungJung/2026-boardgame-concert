@@ -29,15 +29,16 @@ const sheetGame = (
 ) : Game => ({ title, publisher, description, status, type, weight, players: "현장 안내", time: "현장 안내", audience: "공유 시트의 공개 라인업을 확인하려는 방문객", video: `${title} 보드게임`, source });
 
 const mandooSource = "https://www.instagram.com/p/Daui3XXE4IF/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==";
+const kbgSource = "https://www.koreaboardgames.com/magazine/menuDetail?boardCd=news&postNo=874";
 
 const games: Game[] = [
   { title: "컴파일", publisher: "만두게임즈", type: "2인", weight: "적당히", players: "2인", time: "20–30분", status: "대표작", description: "AI 테마 덱으로 세 전선을 두고 겨루는 카드 전략전. 높은 카드는 인장, 낮은 카드는 능력으로 쓰는 선택이 핵심입니다.", audience: "짧고 치열한 2인전을 찾는 사람", video: "컴파일 보드게임", image: "/covers/compile-release.png", source: mandooSource },
   { title: "카르디아", publisher: "만두게임즈", type: "2인", weight: "적당히", players: "2인", time: "20분", status: "대표작", description: "동시 공개한 카드의 높낮이에 따라 인장 획득과 카드 능력이 갈리는 심리전입니다.", audience: "블러핑과 심리전을 좋아하는 2인", video: "카르디아 보드게임", image: "/covers/cardia.png", source: mandooSource },
   { title: "꼬치의 달인", publisher: "만두게임즈", type: "파티", weight: "가볍게", players: "2–4인", time: "10분", status: "대표작", description: "주문 카드와 같은 꼬치를 먼저 완성하는 실시간 순발력 게임입니다.", audience: "바로 꺼내 웃을 수 있는 게임을 찾는 모임", video: "꼬치의 달인 보드게임" },
-  { title: "두냐자드의 모험", publisher: "코리아보드게임즈", type: "협력", weight: "가볍게", players: "2–5인", time: "15분", status: "콘 신작", description: "90초 안에 이야기와 맞는 타일을 함께 찾아내는 실시간 협력 어드벤처입니다.", audience: "가족·입문자 협력 플레이", video: "두냐자드의 모험 보드게임", image: "/covers/kbg-release.webp", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16273" },
-  { title: "새우깡 보드게임", publisher: "코리아보드게임즈", type: "가족", weight: "가볍게", players: "2–4인", time: "10분", status: "콘 신작", description: "새우깡을 활용해 간단하게 즐기는 카드게임입니다.", audience: "어린이와 가볍게 즐길 가족", video: "새우깡 보드게임", image: "/covers/kbg-release.webp", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16273" },
-  { title: "블러핏", publisher: "코리아보드게임즈", type: "파티", weight: "가볍게", players: "3–6인", time: "15분", status: "콘 신작", description: "숨긴 카드와 상대의 선택을 읽어 중앙 카드를 가져오는 블러핑 게임입니다.", audience: "상대 표정을 읽는 파티 게임 팬", video: "블러핏 보드게임", image: "/covers/kbg-release.webp", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16273" },
-  { title: "데스 스테이션", publisher: "코리아보드게임즈", type: "추리", weight: "적당히", players: "2–4인", time: "30분", status: "콘 신작", description: "타일을 놓고 단서를 좁혀 가며 사건을 풀어내는 추리 퍼즐입니다.", audience: "추리와 공간 퍼즐을 함께 좋아하는 사람", video: "데스 스테이션 보드게임", image: "/covers/kbg-release.webp", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16273" },
+  { title: "두냐자드의 모험", publisher: "코리아보드게임즈", type: "협력", weight: "가볍게", players: "2–5인", time: "15분", status: "콘 신작", description: "천일야화를 완성하는 실시간 협력 게임. 공식 Pick 2 체험작으로 소개됐습니다.", audience: "가족·입문자 협력 플레이", video: "두냐자드의 모험 보드게임", image: "/covers/kbg-dunyazad.png", source: kbgSource },
+  { title: "새우깡 보드게임", publisher: "코리아보드게임즈", type: "가족", weight: "가볍게", players: "2–4인", time: "10분", status: "콘 신작", description: "농심과 함께 선보이는 새우깡 테마 카드게임. 공식 Pick 4 체험작입니다.", audience: "어린이와 가볍게 즐길 가족", video: "새우깡 보드게임", image: "/covers/kbg-shrimp-cracker.png", source: kbgSource },
+  { title: "블러핏", publisher: "코리아보드게임즈", type: "파티", weight: "가볍게", players: "3–6인", time: "15분", status: "콘 신작", description: "카드 10장으로 즐기는 심리전과 베팅, 배짱 승부. 공식 Pick 3 체험작입니다.", audience: "상대 표정을 읽는 파티 게임 팬", video: "블러핏 보드게임", image: "/covers/kbg-blurfit.png", source: kbgSource },
+  { title: "데스 스테이션", publisher: "코리아보드게임즈", type: "추리", weight: "적당히", players: "2–4인", time: "30분", status: "콘 신작", description: "목숨을 건 리얼리티 퍼즐 쇼에 도전하는 게임. 공식 Pick 1 체험작입니다.", audience: "추리와 공간 퍼즐을 함께 좋아하는 사람", video: "데스 스테이션 보드게임", image: "/covers/kbg-death-station.png", source: kbgSource },
   { title: "세티 확장: 우주기관", publisher: "보드피아", type: "전략", weight: "깊게", players: "1–4인", time: "90–150분", status: "콘 신작", description: "비대칭 우주기관 11개와 외계종족 3종, 새 프로젝트를 더하는 《세티》 확장입니다.", audience: "세티를 깊게 즐긴 전략 게이머", video: "세티 우주기관 보드게임", image: "/covers/seti-release.png", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16258" },
   { title: "엠버하트", publisher: "보드피아", type: "전략", weight: "적당히", players: "1–4인", time: "45–75분", status: "콘 신작", description: "일꾼을 배치해 드래곤을 구조·훈련하고 밀렵꾼과 맞서는 판타지 전략게임입니다.", audience: "테마 있는 일꾼 놓기 입문자", video: "엠버하트 보드게임", image: "/covers/emberheart-release.png", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16270" },
   { title: "죄악의 카니발", publisher: "보드피아", type: "파티", weight: "가볍게", players: "3–6인", time: "20분", status: "콘 신작", description: "일곱 죄악 카드를 비밀리에 고르고 주사위를 가져오며 상대를 방해하는 블러핑 게임입니다.", audience: "가벼운 견제와 심리전을 원하는 모임", video: "죄악의 카니발 보드게임", image: "/covers/carnival-release.png", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16270" },
@@ -73,10 +74,10 @@ const games: Game[] = [
   sheetGame("보츠와나", "만두게임즈", "공식 부스 포스터의 ‘간단한데 재밌다! 캐주얼 게임’ 체험작입니다.", "현장 공개", "가족", "가볍게", mandooSource),
   sheetGame("사그라다", "만두게임즈", "공식 부스 포스터의 ‘퀄리티 갑! 명작 게임’ 체험작입니다.", "대표작", "전략", "적당히", mandooSource),
   sheetGame("17 다이스 벳", "만두게임즈", "공식 부스 포스터의 ‘퀄리티 갑! 명작 게임’ 체험작입니다. 현장 운영 게임은 상황에 따라 달라질 수 있습니다.", "현장 공개", "전략", "적당히", mandooSource),
-  sheetGame("판다판다", "코리아보드게임즈", "가볍게 즐기는 카드게임입니다."),
-  sheetGame("소다러브", "코리아보드게임즈", "가볍게 즐기는 카드게임입니다."),
-  sheetGame("멍상블", "코리아보드게임즈", "가볍게 즐기는 카드게임입니다."),
-  sheetGame("골프", "코리아보드게임즈", "고전 게임을 보드게임으로 즐기는 라인업입니다."),
+  { ...sheetGame("판다판다", "코리아보드게임즈", "작은 박스에 담은 큰 재미를 내세운 공식 Pick 5 체험작입니다.", "콘 신작", "가족", "가볍게", kbgSource), image: "/covers/kbg-small-box-lineup.png" },
+  { ...sheetGame("소다러브", "코리아보드게임즈", "작은 박스에 담은 큰 재미를 내세운 공식 Pick 5 체험작입니다.", "콘 신작", "가족", "가볍게", kbgSource), image: "/covers/kbg-small-box-lineup.png" },
+  { ...sheetGame("멍상블", "코리아보드게임즈", "작은 박스에 담은 큰 재미를 내세운 공식 Pick 5 체험작입니다.", "콘 신작", "가족", "가볍게", kbgSource), image: "/covers/kbg-small-box-lineup.png" },
+  { ...sheetGame("골프", "코리아보드게임즈", "고전 게임을 더 쉽고 편하게 즐기는 공식 Pick 6 체험작입니다.", "콘 신작", "가족", "가볍게", kbgSource), image: "/covers/kbg-golf.png" },
   { ...sheetGame("덱커스", "보드피아", "사이버펑크 테마의 1인용 덱빌딩 게임입니다.", "콘 신작", "전략", "적당히"), image: "/covers/deckers.png", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16270" },
   sheetGame("스타워즈 언리미티드", "하비게임몰", "스타워즈 테마의 TCG입니다.", "대표작", "2인", "적당히"),
   sheetGame("건담 카드게임", "하비게임몰", "건담 테마의 TCG입니다.", "대표작", "2인", "적당히"),
@@ -146,7 +147,7 @@ const vendorNotes: Record<string, string> = {
 };
 const vendorLinks: Record<string, { label: string; url: string }> = {
   "만두게임즈": { label: "공식 부스 소개 ↗", url: mandooSource },
-  "코리아보드게임즈": { label: "공식 부스 소개 ↗", url: "https://www.koreaboardgames.com/magazine/menuDetail?boardCd=news&postNo=874" },
+  "코리아보드게임즈": { label: "공식 부스 소개 ↗", url: kbgSource },
   "보드피아": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16270" },
   "보드엠": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16271" },
   "아스모디": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16288" },
