@@ -17,6 +17,7 @@ type Game = {
   image?: string;
   imageCrop?: { position: string; size: string };
   source?: string;
+  sourceLabel?: string;
 };
 
 const sheetGame = (
@@ -58,7 +59,7 @@ const games: Game[] = [
   { title: "네뷸라 컬러스", publisher: "게임올로지", type: "2인", weight: "가볍게", players: "2인", time: "15분", status: "현장 공개", description: "별 조각으로 세트와 연속 숫자를 만드는 2인 카드게임입니다.", audience: "작고 예쁜 2인 카드게임을 찾는 사람", video: "네뷸라 컬러스 보드게임" },
   { title: "다이스택", publisher: "보드붐", type: "파티", weight: "가볍게", players: "2–4인", time: "10분", status: "대표작", description: "주사위를 조건에 맞춰 빠르게 쌓는 손기술 게임입니다.", audience: "짧은 라운드의 손맛을 원하는 가족", video: "다이스택 보드게임" },
   { title: "점핑다이스", publisher: "보드붐", type: "파티", weight: "가볍게", players: "2–4인", time: "10분", status: "대표작", description: "주사위의 색과 숫자 조건을 빠르게 판단하는 순발력 게임입니다.", audience: "아이부터 어른까지 즐길 반응 게임", video: "점핑다이스 보드게임" },
-  { title: "오목체스", publisher: "매직빈게임즈", type: "전략", weight: "적당히", players: "2인", time: "30분", status: "대표작", description: "오목의 연결 규칙과 서로 다른 이동 능력을 지닌 말을 결합한 추상전략입니다.", audience: "체스와 오목 모두 좋아하는 2인", video: "오목체스 보드게임" },
+  { title: "오목체스", publisher: "매직빈게임즈", type: "전략", weight: "적당히", players: "2인", time: "30분", status: "대표작", description: "영상 소개처럼 오목의 승리 조건에 체스식 이동과 견제를 더해, 한 수를 묵직하게 고르는 추상 전략입니다.", audience: "체스와 오목 모두 좋아하는 2인", video: "오목체스 보드게임", image: "/video-stills/omok-chess-youtube.png", source: "https://youtu.be/om8G4KPQgso?si=ds66eY3VSwImR_gU", sourceLabel: "영상 소개 화면 · 설명 출처 보기 ↗" },
   { title: "식스틴", publisher: "매직빈게임즈", type: "전략", weight: "가볍게", players: "2–4인", time: "20분", status: "대표작", description: "숫자 타일을 배치·조합하며 점수를 만드는 추상전략입니다.", audience: "규칙은 짧고 생각할 거리는 있는 게임 팬", video: "식스틴 보드게임" },
   { title: "포켓알까기", publisher: "조엔", type: "가족", weight: "가볍게", players: "2–4인", time: "10분", status: "대표작", description: "손가락으로 말을 튕겨 상대 말을 떨어뜨리는 휴대용 덱스터리티입니다.", audience: "어디서든 바로 꺼낼 게임을 찾는 가족", video: "포켓알까기 보드게임" },
   { title: "루미큐브", publisher: "놀이속의세상", type: "가족", weight: "가볍게", players: "2–4인", time: "30–60분", status: "대표작", description: "숫자 타일을 같은 숫자 그룹이나 연속 숫자 묶음으로 내려놓는 클래식입니다.", audience: "세대가 함께 앉는 가족 테이블", video: "루미큐브 보드게임" },
