@@ -1700,11 +1700,84 @@ const mapBooths = [
   ["조엔", "map-joen"],
 ] as const;
 
+const recommendationSheetSource =
+  "https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=57768379#gid=57768379";
+
+const recommendationRoutes = [
+  {
+    id: "new-release",
+    label: "신작 집중",
+    title: "신작과 전략 게임을 먼저 보는 루트",
+    description:
+      "대형 퍼블리셔와 전략·미스터리 중심 부스를 연결했습니다. 출시작과 깊이 있는 게임을 우선 확인하기 좋습니다.",
+    color: "#e44848",
+    vendors: [
+      "만두게임즈",
+      "코리아보드게임즈",
+      "언더독게임즈",
+      "보드피아",
+      "데블다이스",
+      "미스터리 게임즈",
+      "MTS",
+      "아스모디",
+    ],
+  },
+  {
+    id: "quick-pick",
+    label: "빠른 핵심",
+    title: "짧은 시간에 핵심 부스를 보는 루트",
+    description:
+      "동선을 크게 벌리지 않고 대표 퍼블리셔 네 곳을 묶었습니다. 시간이 부족한 방문객에게 적합합니다.",
+    color: "#72c86a",
+    vendors: ["만두게임즈", "코리아보드게임즈", "보드엠", "행복한 바오밥"],
+  },
+  {
+    id: "all-round",
+    label: "올라운드",
+    title: "인기 부스와 다양한 장르를 함께 보는 루트",
+    description:
+      "대표 업체와 체험·대회·작가존 주변을 넓게 둘러보는 구성입니다. 하루를 여유롭게 쓰는 방문객에게 맞습니다.",
+    color: "#3577d4",
+    vendors: [
+      "만두게임즈",
+      "코리아보드게임즈",
+      "MTS",
+      "보드엠",
+      "행복한 바오밥",
+      "아스모디",
+    ],
+  },
+  {
+    id: "family-play",
+    label: "가족·체험",
+    title: "가족과 가볍게 체험하는 루트",
+    description:
+      "가족 게임과 짧은 체험작이 많은 부스를 중심으로 구성했습니다. 아이와 함께 방문하거나 입문 게임을 찾을 때 편합니다.",
+    color: "#e6d92b",
+    vendors: [
+      "만두게임즈",
+      "코리아보드게임즈",
+      "보드붐",
+      "조엔",
+      "놀이속의세상",
+      "매직빈게임즈",
+      "행복한 바오밥",
+      "아스모디",
+    ],
+  },
+] as const;
+
+const routeVendorId = (vendor: string) =>
+  `route-vendor-${vendor.replaceAll(" ", "-")}`;
+
 export default function Home() {
   const [filter, setFilter] = useState("전체");
   const [selectedVendor, setSelectedVendor] = useState("전체");
   const [vendorMenuOpen, setVendorMenuOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(games[0]);
+  const [activeRouteId, setActiveRouteId] = useState(
+    recommendationRoutes[0].id,
+  );
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const [wishlistSort, setWishlistSort] = useState<"priority" | "vendor">(
@@ -1717,12 +1790,33 @@ export default function Home() {
     () =>
       games.filter(
         (game) =>
-          (filter === "전체" || filter === "이벤트" || game.type === filter) &&
+          (filter === "전체" ||
+            filter === "이벤트" ||
+            filter === "추천 루트" ||
+            game.type === filter) &&
           (selectedVendor === "전체" || game.publisher === selectedVendor),
       ),
     [filter, selectedVendor],
   );
   const isEventView = filter === "이벤트";
+  const isRouteView = filter === "추천 루트";
+  const showEventContent = filter === "전체" || isEventView;
+  const activeRoute =
+    recommendationRoutes.find((route) => route.id === activeRouteId) ??
+    recommendationRoutes[0];
+  const routeGameGroups = useMemo(
+    () =>
+      activeRoute.vendors
+        .map((vendor) => ({
+          vendor,
+          games: games
+            .filter((game) => game.publisher === vendor)
+            .sort((a, b) => Number(Boolean(b.image)) - Number(Boolean(a.image)))
+            .slice(0, 2),
+        }))
+        .filter((group) => group.games.length > 0),
+    [activeRoute],
+  );
   const visibleEventNotes = useMemo(
     () =>
       Object.entries(vendorNotes).filter(
@@ -1829,6 +1923,10 @@ export default function Home() {
     document
       .querySelector("#vendors")
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const selectFilter = (item: string) => {
+    if (item === "추천 루트") setSelectedVendor("전체");
+    setFilter(item);
   };
   const addToWishlist = (game: Game) => {
     const id = gameId(game);
@@ -2134,17 +2232,18 @@ export default function Home() {
             <div className="filter-row">
               {[
                 "전체",
+                "추천 루트",
+                "이벤트",
                 "파티",
                 "가족",
                 "협력",
                 "추리",
                 "2인",
                 "전략",
-                "이벤트",
               ].map((item) => (
                 <button
                   className={filter === item ? "active" : ""}
-                  onClick={() => setFilter(item)}
+                  onClick={() => selectFilter(item)}
                   key={item}
                 >
                   {item}
@@ -2159,7 +2258,9 @@ export default function Home() {
               <em>
                 {isEventView
                   ? `${visibleEventNotes.length} EVENTS`
-                  : `${filtered.length} GAMES`}
+                  : isRouteView
+                    ? `${routeGameGroups.length} STOPS`
+                    : `${filtered.length} GAMES`}
               </em>
             </p>
             {vendorLinks[selectedVendor] && (
@@ -2182,12 +2283,38 @@ export default function Home() {
               </button>
             )}
           </div>
-          {isEventView ? (
+          {showEventContent && (
             <div
               className="events-tab-content"
               aria-label={`${selectedVendor} 이벤트`}
             >
-              {selectedVendor === "전체" && visibleEventNotes.length > 0 && (
+              {vendorFeatures[selectedVendor] && (
+                <aside className="vendor-feature">
+                  <a
+                    href={vendorFeatures[selectedVendor].source}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      src={vendorFeatures[selectedVendor].image}
+                      alt={`${selectedVendor} ${vendorFeatures[selectedVendor].title} 포스터`}
+                    />
+                  </a>
+                  <div>
+                    <span className="mono">OFFICIAL BOOTH POST</span>
+                    <h2>{vendorFeatures[selectedVendor].title}</h2>
+                    <p>{vendorFeatures[selectedVendor].description}</p>
+                    <a
+                      href={vendorFeatures[selectedVendor].source}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      공식 원문 보기 ↗
+                    </a>
+                  </div>
+                </aside>
+              )}
+              {visibleEventNotes.length > 0 && (
                 <>
                   <p className="mono">BOOTH EVENT NOTES / BOARDLIFE CURATED</p>
                   <div className="event-swiper">
@@ -2274,42 +2401,165 @@ export default function Home() {
                 </section>
               )}
               {selectedVendor !== "전체" &&
+                !vendorFeatures[selectedVendor] &&
                 !vendorEvents[selectedVendor] &&
-                !boothPosters[selectedVendor] && (
+                !boothPosters[selectedVendor] &&
+                visibleEventNotes.length === 0 && (
                   <p className="events-empty">
                     이 업체의 별도 이벤트 이미지·일정은 아직 등록되지
                     않았습니다.
                   </p>
                 )}
             </div>
-          ) : (
-            <>
-              {vendorFeatures[selectedVendor] && (
-                <aside className="vendor-feature">
-                  <a
-                    href={vendorFeatures[selectedVendor].source}
-                    target="_blank"
-                    rel="noreferrer"
+          )}
+          {isRouteView ? (
+            <section
+              className="recommendation-routes"
+              aria-label="케이스별 추천 루트"
+            >
+              <header className="route-heading">
+                <div>
+                  <span className="mono">SHEET CURATED ROUTES</span>
+                  <h2>내 일정에 맞는 추천 동선</h2>
+                  <p>
+                    방문 목적을 고르면 추천 부스, 위치, 대표 게임을 한 번에
+                    확인할 수 있습니다.
+                  </p>
+                </div>
+                <a
+                  href={recommendationSheetSource}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  추천 pick 시트 원문 ↗
+                </a>
+              </header>
+              <div className="route-tabs" role="tablist" aria-label="추천 루트 선택">
+                {recommendationRoutes.map((route) => (
+                  <button
+                    key={route.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeRoute.id === route.id}
+                    className={activeRoute.id === route.id ? "active" : ""}
+                    style={{ borderColor: route.color }}
+                    onClick={() => setActiveRouteId(route.id)}
                   >
-                    <img
-                      src={vendorFeatures[selectedVendor].image}
-                      alt={`${selectedVendor} ${vendorFeatures[selectedVendor].title} 포스터`}
-                    />
-                  </a>
+                    <i style={{ backgroundColor: route.color }} />
+                    {route.label}
+                  </button>
+                ))}
+              </div>
+              <article className="route-overview">
+                <div className="route-copy">
+                  <span
+                    className="route-color"
+                    style={{ backgroundColor: activeRoute.color }}
+                  />
                   <div>
-                    <span className="mono">OFFICIAL BOOTH POST</span>
-                    <h2>{vendorFeatures[selectedVendor].title}</h2>
-                    <p>{vendorFeatures[selectedVendor].description}</p>
-                    <a
-                      href={vendorFeatures[selectedVendor].source}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      만두게임즈 원문 보기 ↗
-                    </a>
+                    <p className="mono">{activeRoute.label} ROUTE</p>
+                    <h3>{activeRoute.title}</h3>
+                    <p>{activeRoute.description}</p>
+                    <strong>{activeRoute.vendors.length}개 추천 지점</strong>
                   </div>
-                </aside>
-              )}
+                </div>
+                <div className="route-map-panel">
+                  <div className="hall route-hall">
+                    <div className="hall-note mono">← WEST HALL</div>
+                    <div className="entrance">ENTRANCE →</div>
+                    {mapBooths.map(([vendor, position]) => {
+                      const highlighted = activeRoute.vendors.some(
+                        (routeVendor) => routeVendor === vendor,
+                      );
+                      return (
+                        <button
+                          className={`booth ${position} ${highlighted ? "route-highlight" : "route-muted"}`}
+                          key={vendor}
+                          type="button"
+                          disabled={!highlighted}
+                          style={
+                            highlighted
+                              ? { outlineColor: activeRoute.color }
+                              : undefined
+                          }
+                          onClick={() =>
+                            document
+                              .getElementById(routeVendorId(vendor))
+                              ?.scrollIntoView({
+                                behavior: "smooth",
+                                block: "center",
+                              })
+                          }
+                        >
+                          {vendor}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </article>
+              <div className="route-game-groups">
+                {routeGameGroups.map((group, index) => (
+                  <div
+                    className="route-game-group"
+                    id={routeVendorId(group.vendor)}
+                    key={group.vendor}
+                  >
+                    <header>
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <h3>{group.vendor}</h3>
+                      <button
+                        type="button"
+                        onClick={() => selectVendor(group.vendor)}
+                      >
+                        업체 전체 게임 ↗
+                      </button>
+                    </header>
+                    <div className="route-game-list">
+                      {group.games.map((game) => (
+                        <article key={`${group.vendor}-${game.title}`}>
+                          {game.image &&
+                            (game.imageCrop ? (
+                              <span
+                                className="route-game-image"
+                                style={{
+                                  backgroundImage: `url(${game.image})`,
+                                  backgroundPosition: game.imageCrop.position,
+                                  backgroundSize: game.imageCrop.size,
+                                }}
+                                role="img"
+                                aria-label={`${game.title} 이미지`}
+                              />
+                            ) : (
+                              <img
+                                src={game.image}
+                                alt={`${game.title} 이미지`}
+                              />
+                            ))}
+                          <div>
+                            <span className="mono">
+                              {game.type} · {game.weight}
+                            </span>
+                            <h4>{game.title}</h4>
+                            <p>{game.description}</p>
+                          </div>
+                          <button
+                            className="route-wishlist"
+                            type="button"
+                            onClick={() => addToWishlist(game)}
+                            aria-pressed={wishlistIds.has(gameId(game))}
+                          >
+                            {wishlistIds.has(gameId(game)) ? "담김 ✓" : "+ 구매희망"}
+                          </button>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : !isEventView ? (
+            <>
               <div className="game-cards">
                 {filtered.map((game) => (
                   <article
@@ -2395,7 +2645,7 @@ export default function Home() {
                 ))}
               </div>
             </>
-          )}
+          ) : null}
         </div>
       </section>
       <footer>
