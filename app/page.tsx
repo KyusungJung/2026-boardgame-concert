@@ -49,6 +49,7 @@ const boardMEventSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_commu
 const mandooBoardlifeEventSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78921&view=new&pg=3";
 const mtsEventSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78924&view=new&pg=3";
 const plateEventSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78954&view=new&pg=2";
+const latestBoardlifeSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78950";
 
 const games: Game[] = [
   { title: "컴파일", publisher: "만두게임즈", type: "2인", weight: "적당히", players: "2인", time: "20–30분", status: "대표작", description: "AI 테마 덱으로 세 전선을 두고 겨루는 카드 전략전. 높은 카드는 인장, 낮은 카드는 능력으로 쓰는 선택이 핵심입니다.", audience: "짧고 치열한 2인전을 찾는 사람", video: "컴파일 보드게임", image: "/covers/compile-release.png", source: mandooSource },
@@ -97,6 +98,17 @@ const games: Game[] = [
   { ...sheetGame("소다러브", "코리아보드게임즈", "작은 박스에 담은 큰 재미를 내세운 공식 Pick 5 체험작입니다.", "콘 신작", "가족", "가볍게", kbgSource), image: "/covers/kbg-small-box-lineup.png" },
   { ...sheetGame("멍상블", "코리아보드게임즈", "작은 박스에 담은 큰 재미를 내세운 공식 Pick 5 체험작입니다.", "콘 신작", "가족", "가볍게", kbgSource), image: "/covers/kbg-small-box-lineup.png" },
   { ...sheetGame("골프", "코리아보드게임즈", "고전 게임을 더 쉽고 편하게 즐기는 공식 Pick 6 체험작입니다.", "콘 신작", "가족", "가볍게", kbgSource), image: "/covers/kbg-golf.png" },
+  sheetGame("커피 러시", "코리아보드게임즈", "7월 15일 종합 정리에서 2인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "전략", "적당히", latestBoardlifeSource),
+  sheetGame("캡슐 컬렉터", "코리아보드게임즈", "7월 15일 종합 정리에서 2인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "가족", "가볍게", latestBoardlifeSource),
+  sheetGame("브러시우드", "코리아보드게임즈", "7월 15일 종합 정리에서 2인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "가족", "가볍게", latestBoardlifeSource),
+  sheetGame("알았다오", "코리아보드게임즈", "7월 15일 종합 정리에서 2인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "가족", "가볍게", latestBoardlifeSource),
+  sheetGame("내주세요", "코리아보드게임즈", "7월 15일 종합 정리에서 3인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "파티", "가볍게", latestBoardlifeSource),
+  sheetGame("아브라카 후", "코리아보드게임즈", "7월 15일 종합 정리에서 3인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "파티", "가볍게", latestBoardlifeSource),
+  sheetGame("바다숲", "코리아보드게임즈", "7월 19일 토너먼트와 함께 3인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "가족", "가볍게", latestBoardlifeSource),
+  sheetGame("다이스 챌린저", "코리아보드게임즈", "7월 15일 종합 정리에서 3인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "파티", "가볍게", latestBoardlifeSource),
+  sheetGame("딱 네 취향", "코리아보드게임즈", "7월 15일 종합 정리에서 4인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "파티", "가볍게", latestBoardlifeSource),
+  sheetGame("모두 모여 포켓몬", "코리아보드게임즈", "7월 15일 종합 정리에서 4인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "가족", "가볍게", latestBoardlifeSource),
+  sheetGame("색감과 직감", "코리아보드게임즈", "7월 15일 종합 정리에서 4인 이상 현장 추천 체험작으로 안내됐습니다.", "현장 공개", "가족", "가볍게", latestBoardlifeSource),
   { ...sheetGame("덱커스", "보드피아", "사이버펑크 테마의 1인용 덱빌딩 게임입니다.", "콘 신작", "전략", "적당히"), image: "/covers/deckers.png", source: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16270" },
   sheetGame("스타워즈 언리미티드", "하비게임몰", "스타워즈 테마의 TCG입니다.", "대표작", "2인", "적당히"),
   sheetGame("건담 카드게임", "하비게임몰", "건담 테마의 TCG입니다.", "대표작", "2인", "적당히"),
@@ -112,6 +124,9 @@ const games: Game[] = [
   sheetGame("스타일마스터", "보드엠", "패턴을 맞추는 게임입니다.", "콘 신작", "가족"),
   sheetGame("스누피 장기자랑", "보드엠", "간단한 덱빌딩과 트릭테이킹을 결합한 게임입니다.", "콘 신작", "전략"),
   sheetGame("헬라스 · 케이스96", "플레이트", "보드게임콘 신작으로 소개됐으며, 두 게임은 한정 수량으로 안내됩니다.", "콘 신작", "전략", "적당히", plateEventSource),
+  sheetGame("포테이토맨", "플레이트", "셀렉트 컨테이너 채우기 이벤트에 포함된 현장 판매 게임입니다.", "현장 공개", "파티", "가볍게", latestBoardlifeSource),
+  sheetGame("실버마인", "플레이트", "셀렉트 컨테이너 채우기 이벤트에 포함된 현장 판매 게임입니다.", "현장 공개", "전략", "가볍게", latestBoardlifeSource),
+  sheetGame("피자의 사탑", "플레이트", "셀렉트 컨테이너 채우기 이벤트에서 새로 소개된 현장 판매 게임입니다.", "현장 공개", "가족", "가볍게", latestBoardlifeSource),
   sheetGame("다다다", "행복한 바오밥", "언어를 만들어 가는 협력 파티게임입니다.", "콘 신작", "협력"),
   sheetGame("해녀 미니 확장", "행복한 바오밥", "라이트 게임 《해녀》에 새 이벤트 카드를 더하는 확장입니다.", "콘 신작"),
   sheetGame("탑텐 TV 시트콤", "행복한 바오밥", "다섯 질문이 하나의 에피소드로 이어지는 《탑텐 TV》 게임입니다.", "콘 신작", "파티"),
@@ -140,6 +155,7 @@ const games: Game[] = [
   sheetGame("레드 룸 · 라스트캠프", "보드마카브라더스", "공유 시트에 공개된 대표작 라인업입니다.", "대표작", "추리"),
   sheetGame("한강 에볼루션 · 푸드체인", "초이스", "공유 시트에 공개된 대표작 라인업입니다.", "대표작", "전략", "적당히"),
   sheetGame("평화주의 레이드", "문라이트 게임즈", "공유 시트에 공개된 대표작입니다.", "대표작", "협력"),
+  sheetGame("점핑다이스 컬러", "보드붐", "색과 숫자 조건을 빠르게 판단하는 점핑다이스 라인업의 현장 소개작입니다.", "현장 공개", "파티", "가볍게", latestBoardlifeSource),
   sheetGame("미스터리 로얄", "보드팝", "보드게임·굿즈 기획 기업의 대표작입니다.", "대표작", "추리"),
   sheetGame("부릉부릉 쿼카 · 도리도리 미어", "실버건게임즈", "공유 시트에 공개된 대표작 라인업입니다.", "대표작", "가족"),
   sheetGame("메이즐링", "메이즐링", "접는 미로를 활용한 대표작입니다.", "대표작", "가족"),
@@ -150,21 +166,23 @@ const games: Game[] = [
 
 const vendorTabs = ["전체", ...Array.from(new Set(games.map((game) => game.publisher)))];
 const vendorNotes: Record<string, string> = {
-  "전체": "공유 시트에 정리된 참가 업체와 공개 신작·대표작을 한곳에서 살펴보세요.",
-  "만두게임즈": "현장 구매 수량별·금액별 증정품, 챌린지 대결, 신작 체험 이벤트를 함께 안내합니다. 기존 카르디아 대회 정보도 확인하세요.",
-  "코리아보드게임즈": "신작 체험·리뷰 이벤트와 18~19일 보드게임 대회가 안내돼 있습니다. 공식 부스 공지를 함께 확인하세요.",
+  "전체": "공유 시트와 7월 15일 Boardlife 종합 정리 기준의 참가 업체·공개 신작·대표작을 한곳에서 살펴보세요.",
+  "만두게임즈": "치킨 VS 핫도그·태플·타코 쿠션 고트 치즈 피자 챌린지와 구매 수량별 증정품을 진행합니다. 카르디아 대회는 7월 18일입니다.",
+  "코리아보드게임즈": "250종 이상 쇼핑과 신작 체험 테이블 33개를 운영합니다. 17~19일 피칭데이, 18일 스플렌더 예선, 19일 바다숲 토너먼트도 확인하세요.",
   "보드피아": "세티: 우주 기관·엠버하트·죄악의 카니발을 보드게임콘 출시작으로 소개합니다.",
-  "아스모디": "럭키박스, 구매 개수별 추가 할인, 구매 사은품과 아스모 플레이: 드제코 챌린지를 확인하세요. 온라인콘 출시작은 현장 출시와 구분해 표기했습니다.",
-  "보드엠": "현장 구매 혜택·작가 사인회·인증 및 후기 이벤트와 7월 19일 파러웨이 챔피언십이 안내돼 있습니다.",
-  "MTS": "신작·이벤트 제품 추가 할인, 구매 금액별 사은품, 꽝 없는 아케이드 뽑기를 진행합니다. 에이전트 애비뉴·카르누타 본선 및 미스터리 스퀘어 협업도 안내돼 있습니다.",
-  "플레이트": "《헬라스》와 《케이스96》을 포함한 보드게임콘 신작을 소개합니다. 게시글 기준 두 게임은 한정 수량입니다.",
-  "데블다이스": "데드 바이 데이라이트 빅박스를 현장에서 첫 공개합니다. 할인 판매와 럭키드로우도 진행됩니다.",
+  "아스모디": "온라인콘 신작 3개 이상 구매 시 개당 1,000원 중첩 할인과 드제코 챌린지를 진행합니다. 현장 신작과 온라인콘 신작은 구분해 표기했습니다.",
+  "보드엠": "신작 할인·게임 체험·챌린지·뽑기 이벤트와 7월 19일 파러웨이 챔피언십을 진행합니다. 7월 넷째 주 온라인 보드게임콘도 예고됐습니다.",
+  "MTS": "체험 게임당 코인 1개(최대 4개)로 아케이드 뽑기에 참여할 수 있고, 구매 금액별 사은품·에이전트 애비뉴 및 카르누타 본선도 운영합니다.",
+  "플레이트": "《헬라스》·《케이스96》와 함께 포테이토맨·실버마인·피자의 사탑을 셀렉트 컨테이너 채우기 이벤트에서 만날 수 있습니다.",
+  "데블다이스": "데드 바이 데이라이트 빅박스를 현장에서 첫 공개합니다. 할인·금액별 사은품·탠트릭스 스피드 챌린지·럭키드로우를 진행합니다.",
   "게임올로지": "펜쏠로지와 네뷸라 컬러스를 포함한 공간 퍼즐·2인 게임 라인업입니다.",
-  "보드붐": "전 제품 35% 할인과 《스퀘어 메이커》 Coming Soon 안내가 게시돼 있습니다.",
+  "보드붐": "전 제품 35% 할인과 점핑다이스·점핑다이스 컬러 현장 소개가 안내돼 있습니다. 《스퀘어 메이커》는 아직 판매 확정 전입니다.",
   "매직빈게임즈": "7월 18일 첫 공식 오목체스 대회와 대회 연계 50% 할인, 신·구작 현장 할인이 진행됩니다.",
   "조엔": "휴대하기 좋은 손기술 가족 게임을 소개합니다.",
   "놀이속의세상": "7월 19일 루미큐브 초등부·일반부 대회가 안내돼 있으며, 두 부문 모두 접수 마감 상태입니다.",
   "옐로우스타게임즈": "엔진빌딩과 노선 운영 전략게임을 확인하세요. 온라인 행사 공개작과 현장 라인업은 구분해 확인이 필요합니다.",
+  "미스터리 게임즈": "무료 체험 작품 1개를 완료해 인증하면 UZU 350코인을 받을 수 있습니다. 제작 중 신작은 일반 판매작과 구분해 안내합니다.",
+  "행복한 바오밥": "공개 7종의 단품·구매 단계별 할인과 플레이 제주 일러스트레이터 사인회(토·일 14:30–16:30)를 진행합니다.",
 };
 const vendorLinks: Record<string, { label: string; url: string }> = {
   "만두게임즈": { label: "공식 부스 소개 ↗", url: mandooSource },
@@ -173,7 +191,7 @@ const vendorLinks: Record<string, { label: string; url: string }> = {
   "보드엠": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16271" },
   "플레이트": { label: "보드게임콘 신작 공지 ↗", url: plateEventSource },
   "아스모디": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16288" },
-  "MTS": { label: "공유 시트 라인업 ↗", url: "https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" },
+  "MTS": { label: "최신 종합 정리 ↗", url: latestBoardlifeSource },
   "행복한 바오밥": { label: "공유 시트 라인업 ↗", url: "https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" },
 };
 const vendorFeatures: Record<string, { image: string; title: string; description: string; source: string }> = {
@@ -317,6 +335,6 @@ export default function Home() {
     <section className="map-section" id="map"><div className="map-panel"><div className="map-label mono">COEX EXHIBITION HALL B1 / SHEET VERIFIED BOOTH MAP</div><div className="hall"><div className="hall-note mono">← WEST HALL</div><div className="entrance">ENTRANCE →</div>{mapBooths.map(([vendor, position]) => <button className={`booth ${position}`} onClick={() => selectVendor(vendor)} key={vendor} aria-label={`${vendor} 탭 보기`}>{vendor === "코리아보드게임즈" ? <>코리아<br/>보드게임즈</> : vendor}</button>)}<div className="booth map-mimi">미미월드</div><div className="booth map-raccoon">라쿤펀치<br/>피스크래프트</div><div className="booth map-boardboom-side">보드붐</div><div className="booth map-creators">작가존 · 캐릭터 라이선싱 페어</div><div className="map-legend"><i></i> 클릭: 업체 탭 이동 <span>·</span> <b></b> 도면상 동반 부스</div></div><div className="map-note"><p>공유 시트와 현장 도면 기준으로 재배치했습니다. <strong>파란 블록</strong>을 클릭하면 해당 업체 게임을 바로 볼 수 있습니다.</p><button onClick={() => selectVendor("전체")}>전체 라인업 보기 <span>↓</span></button></div></div></section>
     <section className="vendor-info-index" id="events" aria-label="전체 행사 정보"><p className="mono">BOOTH EVENT NOTES / BOARDLIFE CURATED</p><div>{Object.entries(vendorNotes).filter(([vendor]) => vendor !== "전체").map(([vendor, note]) => <article key={vendor}><h2>{vendor}</h2><p>{note}</p><button onClick={() => selectVendor(vendor)}>게임 보기 ↗</button></article>)}</div></section>
     <section className="vendors-section" id="vendors"><div className="vendor-content"><div className="vendor-return-tabs" aria-label="참가 업체 보기"><button className={selectedVendor === "전체" ? "active" : ""} onClick={() => selectVendor("전체")}>전체 업체</button>{selectedVendor !== "전체" && <button onClick={() => setVendorMenuOpen(true)}>참가 업체 목록 <span>↓</span></button>}</div><div className="game-tools"><div className="filter-row">{["전체", "파티", "가족", "협력", "추리", "2인", "전략"].map((item) => <button className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}</div><label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`${selectedVendor} 게임명 검색`} aria-label="게임명 검색" /></label></div><div className="selection-row"><p className="selection-label"><span className="mono">NOW VIEWING</span> {selectedVendor} <em>{filtered.length} GAMES</em></p>{vendorLinks[selectedVendor] && <a className="vendor-source" href={vendorLinks[selectedVendor].url} target="_blank" rel="noreferrer">{vendorLinks[selectedVendor].label}</a>}</div>{vendorFeatures[selectedVendor] && <aside className="vendor-feature"><a href={vendorFeatures[selectedVendor].source} target="_blank" rel="noreferrer"><img src={vendorFeatures[selectedVendor].image} alt={`${selectedVendor} ${vendorFeatures[selectedVendor].title} 포스터`} /></a><div><span className="mono">OFFICIAL BOOTH POST</span><h2>{vendorFeatures[selectedVendor].title}</h2><p>{vendorFeatures[selectedVendor].description}</p><a href={vendorFeatures[selectedVendor].source} target="_blank" rel="noreferrer">만두게임즈 원문 보기 ↗</a></div></aside>}{vendorEvents[selectedVendor] && <aside className="vendor-event"><a href={vendorEvents[selectedVendor].source} target="_blank" rel="noreferrer"><img src={vendorEvents[selectedVendor].image} alt={`${selectedVendor} ${vendorEvents[selectedVendor].title} 일정`} /></a><div><span className="mono">EVENT SCHEDULE</span><p className="event-date">{vendorEvents[selectedVendor].date}</p><h2>{vendorEvents[selectedVendor].title}</h2><b>{vendorEvents[selectedVendor].location}</b><p>{vendorEvents[selectedVendor].description}</p><a href={vendorEvents[selectedVendor].source} target="_blank" rel="noreferrer">현장 이벤트 원문 보기 ↗</a></div></aside>}{boothPosters[selectedVendor] && <section className="booth-posters" aria-label={`${selectedVendor} 행사 및 대회 소식`}><div className="booth-posters-heading"><span className="mono">SHEET EVENT · TOURNAMENT · BOOTH VISUALS</span><p>공유 시트에 첨부된 행사 이미지와 안내를 게임 목록 전에 정리했습니다.</p></div><div className="booth-poster-grid">{boothPosters[selectedVendor].map((poster) => <article key={poster.image}><a href={poster.source} target="_blank" rel="noreferrer"><img src={poster.image} alt={`${selectedVendor} ${poster.title} 안내 이미지`} /></a><div><h2>{poster.title}</h2><p>{poster.description}</p><a href={poster.source} target="_blank" rel="noreferrer">원문 · 이미지 출처 ↗</a></div></article>)}</div></section>}<div className="game-cards">{filtered.map((game) => <article className={`game-card ${selectedGame.title === game.title ? "selected" : ""}`} key={`${game.publisher}-${game.title}`}>{game.image && <button className="game-cover" onClick={() => setSelectedGame(game)} aria-label={`${game.title} 상세 보기`}>{game.imageCrop ? <span className="game-cover-crop" style={{ backgroundImage: `url(${game.image})`, backgroundPosition: game.imageCrop.position, backgroundSize: game.imageCrop.size }} aria-hidden="true" /> : <img src={game.image} alt={`${game.title} 출시 이미지`} />}</button>}<button className="game-card-main" onClick={() => setSelectedGame(game)}><span className="mono">{game.status}</span><h3>{game.title}</h3><p>{game.description}</p><div><b>{game.type}</b><b>{game.weight}</b><span>{game.players} · {game.time}</span></div></button><button className={`wishlist-add ${wishlistIds.has(gameId(game)) ? "saved" : ""}`} type="button" onClick={() => addToWishlist(game)}>{wishlistIds.has(gameId(game)) ? "저장됨 · 구매희망 보기 ↗" : "구매희망에 담기 +"}</button>{game.source && <a href={game.source} target="_blank" rel="noreferrer">사진·출시 공지 보기 ↗</a>}</article>)}</div></div></section>
-    <footer><a className="brand" href="#top">BGC<span>26</span></a><p>업체·신작 정보는 2026.07.14 Google 공유 시트와 Boardlife 공개 정리를 기준으로 업데이트했습니다.<br/>방문 전 공식 홈페이지에서 최신 공지를 확인하세요.</p><div><a href="https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" target="_blank" rel="noreferrer">GOOGLE SHEET ↗</a><a href="https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78795" target="_blank" rel="noreferrer">BOARDLIFE SOURCE ↗</a><a href="https://www.boardgamecon.com/" target="_blank" rel="noreferrer">OFFICIAL ↗</a></div></footer>
+    <footer><a className="brand" href="#top">BGC<span>26</span></a><p>업체·신작 정보는 Google 공유 시트와 2026.07.15 Boardlife 최신 종합 정리를 기준으로 업데이트했습니다.<br/>방문 전 공식 홈페이지에서 최신 공지를 확인하세요.</p><div><a href="https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" target="_blank" rel="noreferrer">GOOGLE SHEET ↗</a><a href={latestBoardlifeSource} target="_blank" rel="noreferrer">LATEST BOARDLIFE ↗</a><a href="https://www.boardgamecon.com/" target="_blank" rel="noreferrer">OFFICIAL ↗</a></div></footer>
   </main>;
 }
