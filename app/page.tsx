@@ -1617,7 +1617,6 @@ const mapBooths = [
 
 export default function Home() {
   const [filter, setFilter] = useState("전체");
-  const [query, setQuery] = useState("");
   const [selectedVendor, setSelectedVendor] = useState("전체");
   const [vendorMenuOpen, setVendorMenuOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(games[0]);
@@ -1638,13 +1637,20 @@ export default function Home() {
     () =>
       games.filter(
         (game) =>
-          (filter === "전체" || game.type === filter) &&
-          (selectedVendor === "전체" || game.publisher === selectedVendor) &&
-          `${game.title} ${game.publisher}`
-            .toLowerCase()
-            .includes(query.toLowerCase()),
+          (filter === "전체" || filter === "이벤트" || game.type === filter) &&
+          (selectedVendor === "전체" || game.publisher === selectedVendor),
       ),
-    [filter, query, selectedVendor],
+    [filter, selectedVendor],
+  );
+  const isEventView = filter === "이벤트";
+  const visibleEventNotes = useMemo(
+    () =>
+      Object.entries(vendorNotes).filter(
+        ([vendor]) =>
+          vendor !== "전체" &&
+          (selectedVendor === "전체" || vendor === selectedVendor),
+      ),
+    [selectedVendor],
   );
   const wishlistIds = useMemo(
     () => new Set(wishlist.map((item) => item.id)),
@@ -1660,8 +1666,7 @@ export default function Home() {
   const wishlistGroups = useMemo(() => {
     const sorted = [...wishlist].sort(
       (a, b) =>
-        a.publisher.localeCompare(b.publisher, "ko") ||
-        a.priority - b.priority,
+        a.publisher.localeCompare(b.publisher, "ko") || a.priority - b.priority,
     );
     return sorted.reduce<Record<string, WishlistItem[]>>((groups, item) => {
       (groups[item.publisher] ??= []).push(item);
@@ -1678,12 +1683,12 @@ export default function Home() {
             parsed.filter((item): item is WishlistItem =>
               Boolean(
                 item &&
-                  typeof item === "object" &&
-                  "id" in item &&
-                  "title" in item &&
-                  "publisher" in item &&
-                  "priority" in item &&
-                  "addedAt" in item,
+                typeof item === "object" &&
+                "id" in item &&
+                "title" in item &&
+                "publisher" in item &&
+                "priority" in item &&
+                "addedAt" in item,
               ),
             ),
           );
@@ -1721,6 +1726,14 @@ export default function Home() {
       (game) => vendor === "전체" || game.publisher === vendor,
     );
     if (first) setSelectedGame(first);
+    document
+      .querySelector("#vendors")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const showEvents = () => {
+    setSelectedVendor("전체");
+    setFilter("이벤트");
+    setVendorMenuOpen(false);
     document
       .querySelector("#vendors")
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1825,7 +1838,8 @@ export default function Home() {
           event.currentTarget.setPointerCapture(event.pointerId);
         }}
         onPointerMove={(event: ReactPointerEvent<HTMLButtonElement>) =>
-          updatePointerDragTarget(item.id, event.clientX, event.clientY)}
+          updatePointerDragTarget(item.id, event.clientX, event.clientY)
+        }
         onPointerUp={(event: ReactPointerEvent<HTMLButtonElement>) => {
           if (event.currentTarget.hasPointerCapture(event.pointerId)) {
             event.currentTarget.releasePointerCapture(event.pointerId);
@@ -1858,7 +1872,9 @@ export default function Home() {
         </a>
         <nav>
           <a href="#map">MAP</a>
-          <a href="#events">주요 이벤트</a>
+          <button className="nav-event" type="button" onClick={showEvents}>
+            주요 이벤트
+          </button>
           <div className={`vendor-menu ${vendorMenuOpen ? "open" : ""}`}>
             <button
               className="vendor-menu-trigger"
@@ -2064,75 +2080,42 @@ export default function Home() {
               <strong>파란 블록</strong>을 클릭하면 해당 업체 게임을 바로 볼 수
               있습니다.
             </p>
-            <button onClick={() => selectVendor("전체")}>
-              전체 라인업 보기 <span>↓</span>
-            </button>
           </div>
-        </div>
-      </section>
-      <section
-        className="vendor-info-index"
-        id="events"
-        aria-label="전체 행사 정보"
-      >
-        <p className="mono">BOOTH EVENT NOTES / BOARDLIFE CURATED</p>
-        <div className="event-swiper">
-          {Object.entries(vendorNotes)
-            .filter(([vendor]) => vendor !== "전체")
-            .map(([vendor, note]) => (
-              <article key={vendor}>
-                <h2>{vendor}</h2>
-                <p>{note}</p>
-                <button onClick={() => selectVendor(vendor)}>
-                  게임 보기 ↗
-                </button>
-              </article>
-            ))}
         </div>
       </section>
       <section className="vendors-section" id="vendors">
         <div className="vendor-content">
-          <div className="vendor-return-tabs" aria-label="참가 업체 보기">
-            <button
-              className={selectedVendor === "전체" ? "active" : ""}
-              onClick={() => selectVendor("전체")}
-            >
-              전체 업체
-            </button>
-            {selectedVendor !== "전체" && (
-              <button onClick={() => setVendorMenuOpen(true)}>
-                참가 업체 목록 <span>↓</span>
-              </button>
-            )}
-          </div>
           <div className="game-tools">
             <div className="filter-row">
-              {["전체", "파티", "가족", "협력", "추리", "2인", "전략"].map(
-                (item) => (
-                  <button
-                    className={filter === item ? "active" : ""}
-                    onClick={() => setFilter(item)}
-                    key={item}
-                  >
-                    {item}
-                  </button>
-                ),
-              )}
+              {[
+                "전체",
+                "파티",
+                "가족",
+                "협력",
+                "추리",
+                "2인",
+                "전략",
+                "이벤트",
+              ].map((item) => (
+                <button
+                  className={filter === item ? "active" : ""}
+                  onClick={() => setFilter(item)}
+                  key={item}
+                >
+                  {item}
+                </button>
+              ))}
             </div>
-            <label className="search">
-              <span>⌕</span>
-              <input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={`${selectedVendor} 게임명 검색`}
-                aria-label="게임명 검색"
-              />
-            </label>
           </div>
           <div className="selection-row">
             <p className="selection-label">
-              <span className="mono">NOW VIEWING</span> {selectedVendor}{" "}
-              <em>{filtered.length} GAMES</em>
+              <span className="mono">NOW VIEWING</span> {selectedVendor} ·{" "}
+              {filter}{" "}
+              <em>
+                {isEventView
+                  ? `${visibleEventNotes.length} EVENTS`
+                  : `${filtered.length} GAMES`}
+              </em>
             </p>
             {vendorLinks[selectedVendor] && (
               <a
@@ -2154,169 +2137,220 @@ export default function Home() {
               </button>
             )}
           </div>
-          {vendorFeatures[selectedVendor] && (
-            <aside className="vendor-feature">
-              <a
-                href={vendorFeatures[selectedVendor].source}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  src={vendorFeatures[selectedVendor].image}
-                  alt={`${selectedVendor} ${vendorFeatures[selectedVendor].title} 포스터`}
-                />
-              </a>
-              <div>
-                <span className="mono">OFFICIAL BOOTH POST</span>
-                <h2>{vendorFeatures[selectedVendor].title}</h2>
-                <p>{vendorFeatures[selectedVendor].description}</p>
-                <a
-                  href={vendorFeatures[selectedVendor].source}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  만두게임즈 원문 보기 ↗
-                </a>
-              </div>
-            </aside>
-          )}
-          {vendorEvents[selectedVendor] && (
-            <aside className="vendor-event">
-              <a
-                href={vendorEvents[selectedVendor].source}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  src={vendorEvents[selectedVendor].image}
-                  alt={`${selectedVendor} ${vendorEvents[selectedVendor].title} 일정`}
-                />
-              </a>
-              <div>
-                <span className="mono">EVENT SCHEDULE</span>
-                <p className="event-date">
-                  {vendorEvents[selectedVendor].date}
-                </p>
-                <h2>{vendorEvents[selectedVendor].title}</h2>
-                <b>{vendorEvents[selectedVendor].location}</b>
-                <p>{vendorEvents[selectedVendor].description}</p>
-                <a
-                  href={vendorEvents[selectedVendor].source}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  현장 이벤트 원문 보기 ↗
-                </a>
-              </div>
-            </aside>
-          )}
-          {boothPosters[selectedVendor] && (
-            <section
-              className="booth-posters"
-              aria-label={`${selectedVendor} 행사 및 대회 소식`}
+          {isEventView ? (
+            <div
+              className="events-tab-content"
+              aria-label={`${selectedVendor} 이벤트`}
             >
-              <div className="booth-posters-heading">
-                <span className="mono">
-                  SHEET EVENT · TOURNAMENT · BOOTH VISUALS
-                </span>
-                <p>
-                  옆으로 넘겨 이벤트 이미지와 안내를 빠르게 확인하세요.
-                </p>
-              </div>
-              <div className="booth-poster-grid booth-poster-swiper">
-                {boothPosters[selectedVendor].map((poster) => (
-                  <article key={poster.image}>
-                    <a href={poster.source} target="_blank" rel="noreferrer">
-                      <img
-                        src={poster.image}
-                        alt={`${selectedVendor} ${poster.title} 안내 이미지`}
-                      />
+              {selectedVendor === "전체" && visibleEventNotes.length > 0 && (
+                <>
+                  <p className="mono">BOOTH EVENT NOTES / BOARDLIFE CURATED</p>
+                  <div className="event-swiper">
+                    {visibleEventNotes.map(([vendor, note]) => (
+                      <article key={vendor}>
+                        <h2>{vendor}</h2>
+                        <p>{note}</p>
+                        <button onClick={() => selectVendor(vendor)}>
+                          게임 보기 ↗
+                        </button>
+                      </article>
+                    ))}
+                  </div>
+                </>
+              )}
+              {vendorEvents[selectedVendor] && (
+                <aside className="vendor-event">
+                  <a
+                    href={vendorEvents[selectedVendor].source}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      src={vendorEvents[selectedVendor].image}
+                      alt={`${selectedVendor} ${vendorEvents[selectedVendor].title} 일정`}
+                    />
+                  </a>
+                  <div>
+                    <span className="mono">EVENT SCHEDULE</span>
+                    <p className="event-date">
+                      {vendorEvents[selectedVendor].date}
+                    </p>
+                    <h2>{vendorEvents[selectedVendor].title}</h2>
+                    <b>{vendorEvents[selectedVendor].location}</b>
+                    <p>{vendorEvents[selectedVendor].description}</p>
+                    <a
+                      href={vendorEvents[selectedVendor].source}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      현장 이벤트 원문 보기 ↗
                     </a>
-                    <div>
-                      <h2>{poster.title}</h2>
-                      <p>{poster.description}</p>
-                      <a href={poster.source} target="_blank" rel="noreferrer">
-                        원문 · 이미지 출처 ↗
-                      </a>
+                  </div>
+                </aside>
+              )}
+              {boothPosters[selectedVendor] && (
+                <section
+                  className="booth-posters"
+                  aria-label={`${selectedVendor} 행사 및 대회 소식`}
+                >
+                  <div className="booth-posters-heading">
+                    <span className="mono">
+                      SHEET EVENT · TOURNAMENT · BOOTH VISUALS
+                    </span>
+                    <p>옆으로 넘겨 이벤트 이미지와 안내를 빠르게 확인하세요.</p>
+                  </div>
+                  <div className="booth-poster-grid booth-poster-swiper">
+                    {boothPosters[selectedVendor].map((poster) => (
+                      <article key={poster.image}>
+                        <a
+                          href={poster.source}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <img
+                            src={poster.image}
+                            alt={`${selectedVendor} ${poster.title} 안내 이미지`}
+                          />
+                        </a>
+                        <div>
+                          <h2>{poster.title}</h2>
+                          <p>{poster.description}</p>
+                          <a
+                            href={poster.source}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            원문 · 이미지 출처 ↗
+                          </a>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
+              {selectedVendor !== "전체" &&
+                !vendorEvents[selectedVendor] &&
+                !boothPosters[selectedVendor] && (
+                  <p className="events-empty">
+                    이 업체의 별도 이벤트 이미지·일정은 아직 등록되지
+                    않았습니다.
+                  </p>
+                )}
+            </div>
+          ) : (
+            <>
+              {vendorFeatures[selectedVendor] && (
+                <aside className="vendor-feature">
+                  <a
+                    href={vendorFeatures[selectedVendor].source}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      src={vendorFeatures[selectedVendor].image}
+                      alt={`${selectedVendor} ${vendorFeatures[selectedVendor].title} 포스터`}
+                    />
+                  </a>
+                  <div>
+                    <span className="mono">OFFICIAL BOOTH POST</span>
+                    <h2>{vendorFeatures[selectedVendor].title}</h2>
+                    <p>{vendorFeatures[selectedVendor].description}</p>
+                    <a
+                      href={vendorFeatures[selectedVendor].source}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      만두게임즈 원문 보기 ↗
+                    </a>
+                  </div>
+                </aside>
+              )}
+              <div className="game-cards">
+                {filtered.map((game) => (
+                  <article
+                    className={`game-card ${selectedGame.title === game.title ? "selected" : ""}`}
+                    key={`${game.publisher}-${game.title}`}
+                  >
+                    {game.image && (
+                      <button
+                        className="game-cover"
+                        onClick={() => setSelectedGame(game)}
+                        aria-label={`${game.title} 상세 보기`}
+                      >
+                        {game.imageCrop ? (
+                          <span
+                            className="game-cover-crop"
+                            style={{
+                              backgroundImage: `url(${game.image})`,
+                              backgroundPosition: game.imageCrop.position,
+                              backgroundSize: game.imageCrop.size,
+                            }}
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <img
+                            src={game.image}
+                            alt={`${game.title} 출시 이미지`}
+                          />
+                        )}
+                      </button>
+                    )}
+                    <div className="game-card-main">
+                      <button
+                        className="game-card-detail"
+                        onClick={() => setSelectedGame(game)}
+                        aria-label={`${game.title} 상세 보기`}
+                      >
+                        <span className="mono">{game.status}</span>
+                        <h3>{game.title}</h3>
+                        <p>{game.description}</p>
+                        <div>
+                          <b>{game.type}</b>
+                          <b>{game.weight}</b>
+                          <span>
+                            {game.players} · {game.time}
+                          </span>
+                        </div>
+                      </button>
+                      <button
+                        className={`wishlist-icon ${wishlistIds.has(gameId(game)) ? "remove" : ""}`}
+                        type="button"
+                        onClick={() => addToWishlist(game)}
+                        aria-pressed={wishlistIds.has(gameId(game))}
+                        aria-label={
+                          wishlistIds.has(gameId(game))
+                            ? `${game.title} 구매희망 목록에서 제거`
+                            : `${game.title} 구매희망에 담기`
+                        }
+                        title={
+                          wishlistIds.has(gameId(game))
+                            ? "구매희망에서 제거"
+                            : "구매희망에 담기"
+                        }
+                      >
+                        {wishlistIds.has(gameId(game)) ? (
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m-9 0 1 13h10l1-13" />
+                          </svg>
+                        ) : (
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 7H6" />
+                            <circle cx="10" cy="20" r="1" />
+                            <circle cx="18" cy="20" r="1" />
+                          </svg>
+                        )}
+                      </button>
                     </div>
+                    {game.source && (
+                      <a href={game.source} target="_blank" rel="noreferrer">
+                        사진·출시 공지 보기 ↗
+                      </a>
+                    )}
                   </article>
                 ))}
               </div>
-            </section>
+            </>
           )}
-          <div className="game-cards">
-            {filtered.map((game) => (
-              <article
-                className={`game-card ${selectedGame.title === game.title ? "selected" : ""}`}
-                key={`${game.publisher}-${game.title}`}
-              >
-                {game.image && (
-                  <button
-                    className="game-cover"
-                    onClick={() => setSelectedGame(game)}
-                    aria-label={`${game.title} 상세 보기`}
-                  >
-                    {game.imageCrop ? (
-                      <span
-                        className="game-cover-crop"
-                        style={{
-                          backgroundImage: `url(${game.image})`,
-                          backgroundPosition: game.imageCrop.position,
-                          backgroundSize: game.imageCrop.size,
-                        }}
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <img src={game.image} alt={`${game.title} 출시 이미지`} />
-                    )}
-                  </button>
-                )}
-                <div className="game-card-main">
-                  <button
-                    className="game-card-detail"
-                    onClick={() => setSelectedGame(game)}
-                    aria-label={`${game.title} 상세 보기`}
-                  >
-                    <span className="mono">{game.status}</span>
-                    <h3>{game.title}</h3>
-                    <p>{game.description}</p>
-                    <div>
-                      <b>{game.type}</b>
-                      <b>{game.weight}</b>
-                      <span>
-                        {game.players} · {game.time}
-                      </span>
-                    </div>
-                  </button>
-                  <button
-                    className={`wishlist-icon ${wishlistIds.has(gameId(game)) ? "remove" : ""}`}
-                    type="button"
-                    onClick={() => addToWishlist(game)}
-                    aria-pressed={wishlistIds.has(gameId(game))}
-                    aria-label={wishlistIds.has(gameId(game)) ? `${game.title} 구매희망 목록에서 제거` : `${game.title} 구매희망에 담기`}
-                    title={wishlistIds.has(gameId(game)) ? "구매희망에서 제거" : "구매희망에 담기"}
-                  >
-                    {wishlistIds.has(gameId(game)) ? (
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m-9 0 1 13h10l1-13" />
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 7H6" />
-                        <circle cx="10" cy="20" r="1" />
-                        <circle cx="18" cy="20" r="1" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-                {game.source && (
-                  <a href={game.source} target="_blank" rel="noreferrer">
-                    사진·출시 공지 보기 ↗
-                  </a>
-                )}
-              </article>
-            ))}
-          </div>
         </div>
       </section>
       <footer>
