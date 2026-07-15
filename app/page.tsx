@@ -34,6 +34,10 @@ const mandooSource = "https://www.instagram.com/p/Daui3XXE4IF/?utm_source=ig_web
 const kbgSource = "https://www.koreaboardgames.com/magazine/menuDetail?boardCd=news&postNo=874";
 const asmodeeSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78895&view=new";
 const asmodeeScheduleSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78896&view=new";
+const boardMEventSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78922&view=new&pg=3";
+const mandooBoardlifeEventSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78921&view=new&pg=3";
+const mtsEventSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78924&view=new&pg=3";
+const plateEventSource = "https://boardlife.co.kr/bbs_detail.php?tb=board_community&bbs_num=78954&view=new&pg=2";
 
 const games: Game[] = [
   { title: "컴파일", publisher: "만두게임즈", type: "2인", weight: "적당히", players: "2인", time: "20–30분", status: "대표작", description: "AI 테마 덱으로 세 전선을 두고 겨루는 카드 전략전. 높은 카드는 인장, 낮은 카드는 능력으로 쓰는 선택이 핵심입니다.", audience: "짧고 치열한 2인전을 찾는 사람", video: "컴파일 보드게임", image: "/covers/compile-release.png", source: mandooSource },
@@ -96,6 +100,7 @@ const games: Game[] = [
   sheetGame("킵더히 확장", "MTS", "비대칭 협동 던전 디펜스·덱빌딩 게임의 확장입니다.", "콘 신작", "협력", "적당히"),
   sheetGame("스타일마스터", "보드엠", "패턴을 맞추는 게임입니다.", "콘 신작", "가족"),
   sheetGame("스누피 장기자랑", "보드엠", "간단한 덱빌딩과 트릭테이킹을 결합한 게임입니다.", "콘 신작", "전략"),
+  sheetGame("헬라스 · 케이스96", "플레이트", "보드게임콘 신작으로 소개됐으며, 두 게임은 한정 수량으로 안내됩니다.", "콘 신작", "전략", "적당히", plateEventSource),
   sheetGame("다다다", "행복한 바오밥", "언어를 만들어 가는 협력 파티게임입니다.", "콘 신작", "협력"),
   sheetGame("해녀 미니 확장", "행복한 바오밥", "라이트 게임 《해녀》에 새 이벤트 카드를 더하는 확장입니다.", "콘 신작"),
   sheetGame("탑텐 TV 시트콤", "행복한 바오밥", "다섯 질문이 하나의 에피소드로 이어지는 《탑텐 TV》 게임입니다.", "콘 신작", "파티"),
@@ -135,12 +140,13 @@ const games: Game[] = [
 const vendorTabs = ["전체", ...Array.from(new Set(games.map((game) => game.publisher)))];
 const vendorNotes: Record<string, string> = {
   "전체": "공유 시트에 정리된 참가 업체와 공개 신작·대표작을 한곳에서 살펴보세요.",
-  "만두게임즈": "로고 뱃지 이벤트와 7월 18일 카르디아 대회가 진행됩니다. 야생의 수호자들은 대회 4강 상품으로 안내된 출시 예정 확장입니다.",
+  "만두게임즈": "현장 구매 수량별·금액별 증정품, 챌린지 대결, 신작 체험 이벤트를 함께 안내합니다. 기존 카르디아 대회 정보도 확인하세요.",
   "코리아보드게임즈": "신작 체험·리뷰 이벤트와 18~19일 보드게임 대회가 안내돼 있습니다. 공식 부스 공지를 함께 확인하세요.",
   "보드피아": "세티: 우주 기관·엠버하트·죄악의 카니발을 보드게임콘 출시작으로 소개합니다.",
-  "아스모디": "출시 특가·구매 수량별 할인·타임 특가와 아스모 플레이: 드제코 챌린지가 진행됩니다. 온라인콘 출시작은 현장 출시와 구분해 표기했습니다.",
-  "보드엠": "신작 할인·체험·챌린지·뽑기 이벤트와 7월 19일 파러웨이 챔피언십이 안내돼 있습니다.",
-  "MTS": "신작 할인·구매 사은품·한정 프로모션, 에이전트 애비뉴·카르누타 본선 및 미스터리 스퀘어 협업이 안내돼 있습니다.",
+  "아스모디": "럭키박스, 구매 개수별 추가 할인, 구매 사은품과 아스모 플레이: 드제코 챌린지를 확인하세요. 온라인콘 출시작은 현장 출시와 구분해 표기했습니다.",
+  "보드엠": "현장 구매 혜택·작가 사인회·인증 및 후기 이벤트와 7월 19일 파러웨이 챔피언십이 안내돼 있습니다.",
+  "MTS": "신작·이벤트 제품 추가 할인, 구매 금액별 사은품, 꽝 없는 아케이드 뽑기를 진행합니다. 에이전트 애비뉴·카르누타 본선 및 미스터리 스퀘어 협업도 안내돼 있습니다.",
+  "플레이트": "《헬라스》와 《케이스96》을 포함한 보드게임콘 신작을 소개합니다. 게시글 기준 두 게임은 한정 수량입니다.",
   "데블다이스": "데드 바이 데이라이트 빅박스를 현장에서 첫 공개합니다. 할인 판매와 럭키드로우도 진행됩니다.",
   "게임올로지": "펜쏠로지와 네뷸라 컬러스를 포함한 공간 퍼즐·2인 게임 라인업입니다.",
   "보드붐": "전 제품 35% 할인과 《스퀘어 메이커》 Coming Soon 안내가 게시돼 있습니다.",
@@ -154,6 +160,7 @@ const vendorLinks: Record<string, { label: string; url: string }> = {
   "코리아보드게임즈": { label: "공식 부스 소개 ↗", url: kbgSource },
   "보드피아": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16270" },
   "보드엠": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16271" },
+  "플레이트": { label: "보드게임콘 신작 공지 ↗", url: plateEventSource },
   "아스모디": { label: "신작 공개 자료 ↗", url: "https://boardlife.co.kr/bbs_detail.php?tb=board_news&bbs_num=16288" },
   "MTS": { label: "공유 시트 라인업 ↗", url: "https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" },
   "행복한 바오밥": { label: "공유 시트 라인업 ↗", url: "https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=1521344712#gid=1521344712" },
@@ -182,6 +189,9 @@ const boothPosters: Record<string, BoothPoster[]> = {
   "만두게임즈": [
     { image: "/booth-posters/image12.jpg", title: "체험 도전 · 랜덤 선물", description: "치킨 vs 핫도그 대결, 태플 챌린지, 타코 쿠션 고트 치즈 피자 테이블 1등에게 현장 선물을 안내합니다.", source: mandooEventSource },
     { image: "/booth-posters/image15.jpg", title: "콘 특가 · 구매 사은품", description: "보드게임 200여 종 특가와 구매 금액·제품별 증정품을 확인할 수 있습니다.", source: mandooEventSource },
+    { image: "/booth-events/mandoo-event-01.jpg", title: "구매 수량별 증정", description: "현장에서 게임 구매 수량에 따라 제공되는 증정품 안내입니다.", source: mandooBoardlifeEventSource },
+    { image: "/booth-events/mandoo-event-02.jpg", title: "구매 금액별 증정", description: "현장 구매 금액 구간별로 받을 수 있는 증정품을 안내합니다.", source: mandooBoardlifeEventSource },
+    { image: "/booth-events/mandoo-event-03.jpg", title: "챌린지 대결 · 신작 체험", description: "참여형 챌린지와 신작 체험 이벤트를 한 장으로 확인할 수 있습니다.", source: mandooBoardlifeEventSource },
   ],
   "코리아보드게임즈": [
     { image: "/booth-posters/image8.jpg", title: "신작 체험 리뷰 이벤트", description: "현장 신작 체험 후 네이버 블로그 또는 인스타그램 리뷰를 남기면 추첨으로 선물을 제공합니다. 기준일은 7월 26일입니다.", source: kbgSource },
@@ -206,9 +216,18 @@ const boothPosters: Record<string, BoothPoster[]> = {
     { image: "/booth-posters/image30.jpg", title: "날짜별 아케이드 상품", description: "16~19일 날짜별 1·2등 게임 상품과 MTS 머니 상품권을 안내합니다.", source: "https://www.instagram.com/p/DawbJVkEhwo/" },
     { image: "/booth-posters/image23.jpg", title: "구매 금액별 사은품", description: "5만·10만·15만 원 구매 구간별 사은품을 선택할 수 있습니다.", source: "https://www.instagram.com/p/DawbJVkEhwo/" },
     { image: "/booth-posters/image26.jpg", title: "7월 입고 예정 게임", description: "원드러스 크리처 윈터폴 확장, 팜핸드, 미스터리 파티 Wave 5, 킵 더 히어로즈 아웃 지하시장·불장난 확장을 보드게임콘에서 만날 수 있다고 안내합니다.", source: "https://www.instagram.com/p/DawbJVkEhwo/" },
+    { image: "/booth-events/mts-event-01.jpg", title: "현장 이벤트 안내 ①", description: "신작 또는 이벤트 제품 구매 뒤 다른 게임을 추가 구매할 때 적용되는 할인 안내입니다.", source: mtsEventSource },
+    { image: "/booth-events/mts-event-02.jpg", title: "현장 이벤트 안내 ②", description: "구매 금액별 증정품과 현장 혜택을 이미지로 확인할 수 있습니다.", source: mtsEventSource },
+    { image: "/booth-events/mts-event-03.jpg", title: "현장 이벤트 안내 ③", description: "MTS게임즈 부스에서 운영하는 구매·체험 혜택 안내입니다.", source: mtsEventSource },
+    { image: "/booth-events/mts-event-04.jpg", title: "현장 이벤트 안내 ④", description: "꽝 없는 아케이드 뽑기 참여 정보를 확인하세요.", source: mtsEventSource },
+    { image: "/booth-events/mts-event-05.jpg", title: "현장 이벤트 안내 ⑤", description: "MTS게임즈의 보드게임콘 현장 이벤트 전체 안내 이미지입니다.", source: mtsEventSource },
   ],
   "보드엠": [
     { image: "/booth-posters/image32.jpg", title: "파러웨이 챔피언십", description: "7월 19일 11:00–14:00, COEX 3층 컨퍼런스룸(남) 318호에서 64명 선착순으로 진행됩니다. 참가자 전원 부스 5,000원 쿠폰이 안내돼 있습니다.", source: "https://boardm.co.kr/article/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD%EC%86%8C%EC%8B%9D%EC%A7%80/1/71363/" },
+    { image: "/booth-events/boardm-event-01.jpg", title: "현장 구매 이벤트", description: "보드게임콘 부스의 현장 구매 관련 혜택을 확인할 수 있습니다.", source: boardMEventSource },
+    { image: "/booth-events/boardm-event-02.jpg", title: "작가 사인회", description: "부스에서 진행되는 작가 사인회 안내입니다.", source: boardMEventSource },
+    { image: "/booth-events/boardm-event-03.jpg", title: "현장 인증 이벤트", description: "행사 현장 인증 참여 방법과 혜택을 안내합니다.", source: boardMEventSource },
+    { image: "/booth-events/boardm-event-04.jpg", title: "후기 이벤트", description: "행사 후기를 남기고 참여할 수 있는 이벤트 안내입니다.", source: boardMEventSource },
   ],
   "행복한 바오밥": [
     { image: "/booth-posters/image28.jpg", title: "수량별 할인", description: "1개 30%, 3개 35%, 5개 40%, 7개 45% 할인으로 구성된 현장 할인표를 안내합니다.", source: "https://www.instagram.com/p/DaSNZ5riZLd/" },
@@ -218,6 +237,16 @@ const boothPosters: Record<string, BoothPoster[]> = {
     { image: "/booth-posters/image21.jpg", title: "머핀타임 체험 이벤트", description: "방문 선물, 구매 사은품, 나만의 기발한 카드를 만드는 카드 콘테스트를 안내합니다.", source: asmodeeSource },
     { image: "/booth-posters/image27.jpg", title: "한정 럭키 박스", description: "파티·전략·올인원 패키지의 구성, 수량, 가격과 구매 제한을 확인할 수 있습니다.", source: asmodeeSource },
     { image: "/booth-posters/image38.jpg", title: "드제코 할인 · 증정", description: "드제코 신작 2종 이상 구매 시 미스테릭스 미니 보드게임 증정 이벤트를 안내합니다. 재고 소진 시 조기 마감될 수 있습니다.", source: asmodeeSource },
+    { image: "/booth-events/asmodee-event-01.jpg", title: "럭키박스 · 현장 혜택", description: "보드게임콘에서 운영하는 아스모디 현장 혜택을 확인하세요.", source: asmodeeSource },
+    { image: "/booth-events/asmodee-event-02.jpg", title: "구매 개수별 추가 할인", description: "구매 수량에 따라 달라지는 현장 추가 할인 안내입니다.", source: asmodeeSource },
+    { image: "/booth-events/asmodee-event-03.jpg", title: "구매 사은품", description: "구매 조건에 따른 현장 증정품을 이미지로 확인할 수 있습니다.", source: asmodeeSource },
+    { image: "/booth-events/asmodee-event-04.jpg", title: "현장 이벤트 안내", description: "아스모디코리아 부스 이벤트를 한 장으로 정리한 안내 이미지입니다.", source: asmodeeSource },
+  ],
+  "플레이트": [
+    { image: "/booth-events/plate-event-01.jpg", title: "보드게임콘 신작 소개 ①", description: "플레이트가 공개한 보드게임콘 신작 안내 이미지입니다.", source: plateEventSource },
+    { image: "/booth-events/plate-event-02.jpg", title: "보드게임콘 신작 소개 ②", description: "현장에서 확인할 수 있는 플레이트 신작 라인업입니다.", source: plateEventSource },
+    { image: "/booth-events/plate-event-03.jpg", title: "보드게임콘 신작 소개 ③", description: "《헬라스》·《케이스96》을 포함한 신작 소개 이미지입니다.", source: plateEventSource },
+    { image: "/booth-events/plate-event-04.jpg", title: "한정 수량 신작", description: "게시글 기준 《헬라스》와 《케이스96》은 한정 수량으로 안내됩니다.", source: plateEventSource },
   ],
 };
 const mapBooths = [
