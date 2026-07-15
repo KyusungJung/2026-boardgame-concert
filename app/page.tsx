@@ -1632,6 +1632,7 @@ export default function Home() {
   const [dragTargetWishlistId, setDragTargetWishlistId] = useState<
     string | null
   >(null);
+  const [wishlistToast, setWishlistToast] = useState<string | null>(null);
   const [wishlistLoaded, setWishlistLoaded] = useState(false);
   const filtered = useMemo(
     () =>
@@ -1701,6 +1702,11 @@ export default function Home() {
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [wishlistOpen]);
+  useEffect(() => {
+    if (!wishlistToast) return;
+    const timeout = window.setTimeout(() => setWishlistToast(null), 2800);
+    return () => window.clearTimeout(timeout);
+  }, [wishlistToast]);
   const selectVendor = (vendor: string) => {
     setSelectedVendor(vendor);
     setFilter("전체");
@@ -1716,7 +1722,8 @@ export default function Home() {
   const addToWishlist = (game: Game) => {
     const id = gameId(game);
     if (wishlistIds.has(id)) {
-      setWishlistOpen(true);
+      setWishlist((items) => items.filter((item) => item.id !== id));
+      setWishlistToast(`${game.title}을(를) 구매희망 목록에서 제거했습니다.`);
       return;
     }
     setWishlist((items) => [
@@ -1731,6 +1738,7 @@ export default function Home() {
         addedAt: Date.now(),
       },
     ]);
+    setWishlistToast(`${game.title}을(를) 구매희망에 담았습니다.`);
   };
   const reorderWishlist = (sourceId: string, targetId: string) => {
     if (sourceId === targetId) return;
@@ -1765,8 +1773,10 @@ export default function Home() {
       setDragTargetWishlistId(targetId);
     }
   };
-  const removeFromWishlist = (id: string) =>
+  const removeFromWishlist = (id: string, title: string) => {
     setWishlist((items) => items.filter((item) => item.id !== id));
+    setWishlistToast(`${title}을(를) 구매희망 목록에서 제거했습니다.`);
+  };
 
   return (
     <main>
@@ -1954,7 +1964,9 @@ export default function Home() {
                           <button
                             className="wishlist-remove"
                             type="button"
-                            onClick={() => removeFromWishlist(item.id)}
+                            onClick={() =>
+                              removeFromWishlist(item.id, item.title)
+                            }
                             aria-label={`${item.title} 목록에서 삭제`}
                           >
                             삭제
@@ -1967,6 +1979,16 @@ export default function Home() {
               </div>
             )}
           </aside>
+        </div>
+      )}
+      {wishlistToast && (
+        <div className="wishlist-toast" role="status">
+          <span>{wishlistToast}</span>
+          {wishlist.length > 0 && (
+            <button type="button" onClick={() => setWishlistOpen(true)}>
+              목록 보기
+            </button>
+          )}
         </div>
       )}
       <section className="hero" id="top">
@@ -2125,6 +2147,15 @@ export default function Home() {
                 {vendorLinks[selectedVendor].label}
               </a>
             )}
+            {wishlist.length > 0 && (
+              <button
+                className="wishlist-list-link"
+                type="button"
+                onClick={() => setWishlistOpen(true)}
+              >
+                구매희망 {wishlist.length}
+              </button>
+            )}
           </div>
           {vendorFeatures[selectedVendor] && (
             <aside className="vendor-feature">
@@ -2192,11 +2223,10 @@ export default function Home() {
                   SHEET EVENT · TOURNAMENT · BOOTH VISUALS
                 </span>
                 <p>
-                  공유 시트에 첨부된 행사 이미지와 안내를 게임 목록 전에
-                  정리했습니다.
+                  옆으로 넘겨 이벤트 이미지와 안내를 빠르게 확인하세요.
                 </p>
               </div>
-              <div className="booth-poster-grid">
+              <div className="booth-poster-grid booth-poster-swiper">
                 {boothPosters[selectedVendor].map((poster) => (
                   <article key={poster.image}>
                     <a href={poster.source} target="_blank" rel="noreferrer">
@@ -2262,18 +2292,24 @@ export default function Home() {
                     </div>
                   </button>
                   <button
-                    className={`wishlist-icon ${wishlistIds.has(gameId(game)) ? "saved" : ""}`}
+                    className={`wishlist-icon ${wishlistIds.has(gameId(game)) ? "remove" : ""}`}
                     type="button"
                     onClick={() => addToWishlist(game)}
                     aria-pressed={wishlistIds.has(gameId(game))}
-                    aria-label={wishlistIds.has(gameId(game)) ? `${game.title} 구매희망 목록 보기` : `${game.title} 구매희망에 담기`}
-                    title={wishlistIds.has(gameId(game)) ? "구매희망 목록 보기" : "구매희망에 담기"}
+                    aria-label={wishlistIds.has(gameId(game)) ? `${game.title} 구매희망 목록에서 제거` : `${game.title} 구매희망에 담기`}
+                    title={wishlistIds.has(gameId(game)) ? "구매희망에서 제거" : "구매희망에 담기"}
                   >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 7H6" />
-                      <circle cx="10" cy="20" r="1" />
-                      <circle cx="18" cy="20" r="1" />
-                    </svg>
+                    {wishlistIds.has(gameId(game)) ? (
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m-9 0 1 13h10l1-13" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 7H6" />
+                        <circle cx="10" cy="20" r="1" />
+                        <circle cx="18" cy="20" r="1" />
+                      </svg>
+                    )}
                   </button>
                 </div>
                 {game.source && (

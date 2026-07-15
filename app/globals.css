@@ -691,12 +691,28 @@ footer div {
 .vendor-source:hover {
   text-decoration: underline;
 }
+.wishlist-list-link {
+  color: var(--ink);
+  font:
+    10px var(--font-geist-mono),
+    monospace;
+  background: #fff;
+  border: 1px solid var(--ink);
+  padding: 8px 10px;
+}
+.wishlist-list-link:hover {
+  background: var(--ink);
+  color: #fff;
+}
 @media (width<=800px) {
   .selection-row {
     flex-direction: column;
     align-items: flex-start;
   }
   .selection-row .vendor-source {
+    margin-top: -7px;
+  }
+  .wishlist-list-link {
     margin-top: -7px;
   }
 }
@@ -1188,8 +1204,29 @@ footer div {
     text-align: left;
     margin-top: 7px;
   }
-  .booth-poster-grid {
+  .booth-poster-grid:not(.booth-poster-swiper) {
     grid-template-columns: 1fr;
+  }
+  .booth-poster-swiper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    padding: 0 0 12px;
+    border: 0;
+    background: transparent;
+    scrollbar-width: none;
+  }
+  .booth-poster-swiper::-webkit-scrollbar {
+    display: none;
+  }
+  .booth-poster-swiper article {
+    flex: 0 0 min(78vw, 330px);
+    border: 1px solid var(--line);
+    scroll-snap-align: start;
+  }
+  .booth-poster-swiper article > a {
+    aspect-ratio: 4/3;
   }
   .booth-poster-grid article > a {
     aspect-ratio: 3/4;
@@ -1589,9 +1626,48 @@ footer div {
 }
 .wishlist-icon:hover,
 .wishlist-icon:focus-visible,
-.wishlist-icon.saved {
+.wishlist-icon.remove {
   border-color: var(--ink);
   background: var(--ink);
   color: #fff;
   outline: 0;
+}
+.wishlist-icon.remove:hover,
+.wishlist-icon.remove:focus-visible {
+  border-color: #d22;
+  background: #d22;
+}
+.wishlist-toast {
+  position: fixed;
+  z-index: 60;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 13px 15px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 5px 5px 0 var(--blue);
+  font-size: 13px;
+}
+.wishlist-toast button {
+  flex: 0 0 auto;
+  border: 1px solid #777;
+  background: transparent;
+  color: #fff;
+  padding: 6px 8px;
+  font: 10px var(--font-geist-mono), monospace;
+}
+.wishlist-toast button:hover {
+  border-color: #fff;
+}
+@media (width<=800px) {
+  .wishlist-toast {
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    max-width: none;
+  }
 }
