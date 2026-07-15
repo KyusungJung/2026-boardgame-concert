@@ -2225,6 +2225,24 @@ export default function Home() {
             </p>
           </div>
         </div>
+        <div className="map-video" aria-labelledby="map-video-title">
+          <header>
+            <span className="mono">BGC26 VIDEO GUIDE</span>
+            <h2 id="map-video-title">
+              26년 보드게임콘 궁금하면 이 영상 클릭!
+            </h2>
+          </header>
+          <div className="map-video-player">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/Or4-MBAY0R8?rel=0"
+              title="26년 보드게임콘 궁금하면 이 영상 클릭!"
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+        </div>
       </section>
       <section className="vendors-section" id="vendors">
         <div className="vendor-content">
