@@ -551,6 +551,23 @@ footer div {
     gap: 14px;
     padding: 0 16px;
   }
+  .hero {
+    align-items: flex-start;
+    min-height: 0;
+    padding: 46px 20px 38px;
+  }
+  .hero h1 {
+    margin: 13px 0 20px;
+  }
+  .hero-meta {
+    gap: 14px 20px;
+    margin-top: 36px;
+  }
+  .hero-number {
+    font-size: 48vw;
+    top: -5vw;
+    right: -1vw;
+  }
   .nav nav {
     gap: 12px;
   }
