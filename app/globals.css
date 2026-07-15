@@ -531,6 +531,18 @@ section {
   font-size: 13px;
   display: flex;
 }
+.route-tabs button > span {
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+.route-tabs button small {
+  color: var(--muted);
+  font:
+    8px var(--font-geist-mono),
+    monospace;
+  margin-top: 3px;
+}
 .route-tabs button.active {
   box-shadow: inset 0 0 0 1px var(--ink);
   background: #f7f7f7;
@@ -596,6 +608,70 @@ section {
   z-index: 2;
   outline: 3px solid;
   outline-offset: -3px;
+}
+.route-summary {
+  border-top: 1px solid var(--ink);
+  margin-top: 34px;
+  padding: 28px 0 0;
+}
+.route-summary > header {
+  grid-template-columns: minmax(240px, 0.34fr) minmax(0, 1fr);
+  gap: 30px;
+  margin-bottom: 20px;
+  display: grid;
+}
+.route-summary > header .mono {
+  color: var(--blue);
+  grid-row: 1 / 3;
+}
+.route-summary > header h3 {
+  letter-spacing: -0.05em;
+  margin: 0;
+  font-size: 26px;
+}
+.route-summary > header p {
+  color: var(--muted);
+  margin: 4px 0 0;
+  font-size: 13px;
+}
+.route-summary-table {
+  border-top: 1px solid var(--line);
+}
+.route-summary-table article {
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: 34px minmax(150px, 0.28fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px 0;
+  display: grid;
+}
+.route-summary-table article > .mono {
+  color: var(--blue);
+  padding-top: 3px;
+}
+.route-summary-place b {
+  letter-spacing: -0.035em;
+  font-size: 15px;
+  display: block;
+}
+.route-summary-place em {
+  color: var(--muted);
+  font:
+    9px var(--font-geist-mono),
+    monospace;
+  margin-top: 6px;
+  font-style: normal;
+  display: block;
+}
+.route-summary-table h4 {
+  letter-spacing: -0.03em;
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+.route-summary-table p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
 }
 .route-game-groups {
   border-top: 1px solid var(--ink);
@@ -2092,6 +2168,36 @@ footer div {
   .route-hall .booth {
     padding: 4px;
     font-size: 8px;
+  }
+  .route-summary {
+    margin-top: 26px;
+    padding-top: 22px;
+  }
+  .route-summary > header {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+  .route-summary > header .mono {
+    grid-row: auto;
+  }
+  .route-summary > header h3 {
+    font-size: 23px;
+  }
+  .route-summary-table article {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+    padding: 16px 0;
+  }
+  .route-summary-place {
+    align-items: center;
+    gap: 8px;
+    display: flex;
+  }
+  .route-summary-place em {
+    margin-top: 0;
+  }
+  .route-summary-table article > div:last-child {
+    grid-column: 2;
   }
   .route-game-group {
     scroll-margin-top: 70px;

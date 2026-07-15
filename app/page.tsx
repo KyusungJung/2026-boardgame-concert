@@ -1703,13 +1703,31 @@ const mapBooths = [
 const recommendationSheetSource =
   "https://docs.google.com/spreadsheets/d/1GO008TzPSP_DikyHO8XppqErtj1Zz74K2glS7N4UhLM/edit?gid=57768379#gid=57768379";
 
-const recommendationRoutes = [
+type RecommendationRoute = {
+  id: string;
+  case: string;
+  label: string;
+  title: string;
+  description: string;
+  color: string;
+  vendors: string[];
+  gameTitles: string[];
+  summary: Array<{
+    vendor: string;
+    category: "게임" | "이벤트" | "공간";
+    title: string;
+    detail: string;
+  }>;
+};
+
+const recommendationRoutes: RecommendationRoute[] = [
   {
     id: "new-release",
+    case: "CASE A",
     label: "신작 집중",
-    title: "신작과 전략 게임을 먼저 보는 루트",
+    title: "헤비게이머 구매 중심 루트",
     description:
-      "대형 퍼블리셔와 전략·미스터리 중심 부스를 연결했습니다. 출시작과 깊이 있는 게임을 우선 확인하기 좋습니다.",
+      "전략·추리 신작과 깊이 있는 게임을 먼저 확보하려는 방문객을 위한 동선입니다. 시트의 빨간 원 표시를 기준으로 정리했습니다.",
     color: "#e44848",
     vendors: [
       "만두게임즈",
@@ -1721,22 +1739,53 @@ const recommendationRoutes = [
       "MTS",
       "아스모디",
     ],
+    gameTitles: [
+      "컴파일",
+      "카르디아",
+      "데스 스테이션",
+      "세티 확장: 우주기관",
+      "엠버하트",
+      "데바데 빅박스",
+      "우리들의 여름방학 · 퍼퓨머리 · 웬디, 어른이 되렴",
+      "멍탐정 푸들 · 미스터리 맨션 0719 · 북부대공을 암살하는 법",
+      "원드러스 크리처",
+      "카르누타",
+      "킹덤 크로싱",
+      "내셔널 이코노미",
+    ],
+    summary: [],
   },
   {
     id: "quick-pick",
+    case: "CASE B",
     label: "빠른 핵심",
-    title: "짧은 시간에 핵심 부스를 보는 루트",
+    title: "라이트게이머 구매 중심 루트",
     description:
-      "동선을 크게 벌리지 않고 대표 퍼블리셔 네 곳을 묶었습니다. 시간이 부족한 방문객에게 적합합니다.",
+      "가족·파티게임을 빠르게 비교하고 구매하기 좋은 네 개 대형 부스를 묶었습니다. 시트의 초록 원 표시를 기준으로 정리했습니다.",
     color: "#72c86a",
     vendors: ["만두게임즈", "코리아보드게임즈", "보드엠", "행복한 바오밥"],
+    gameTitles: [
+      "꼬치의 달인",
+      "치킨vs핫도그",
+      "태플",
+      "두냐자드의 모험",
+      "새우깡 보드게임",
+      "블러핏",
+      "플라워즈",
+      "북타워",
+      "다다다",
+      "플레이 제주",
+      "이레이저",
+    ],
+    summary: [],
   },
   {
     id: "all-round",
+    case: "CASE C",
     label: "올라운드",
-    title: "인기 부스와 다양한 장르를 함께 보는 루트",
+    title: "게임·체험·대회를 고르게 보는 루트",
     description:
-      "대표 업체와 체험·대회·작가존 주변을 넓게 둘러보는 구성입니다. 하루를 여유롭게 쓰는 방문객에게 맞습니다.",
+      "대표 퍼블리셔의 신작을 보면서 체험, 대회, 사인회와 작가존 주변까지 넓게 둘러보는 종합 동선입니다.",
     color: "#3577d4",
     vendors: [
       "만두게임즈",
@@ -1745,27 +1794,228 @@ const recommendationRoutes = [
       "보드엠",
       "행복한 바오밥",
       "아스모디",
+      "메이즐링",
+    ],
+    gameTitles: [
+      "컴파일",
+      "카르디아",
+      "데스 스테이션",
+      "두냐자드의 모험",
+      "원드러스 크리처",
+      "에이전트 애비뉴",
+      "플라워즈",
+      "테이크 타임",
+      "다다다",
+      "플레이 제주",
+      "태그 팀: 아서왕 전설",
+      "패스 더 워드",
+      "메이즐링",
+    ],
+    summary: [
+      {
+        vendor: "만두게임즈",
+        category: "이벤트",
+        title: "카르디아 대회 · 체험 혜택",
+        detail:
+          "7월 18일 카르디아 대회와 치킨vs핫도그·태플 등 체험, 구매 수량별 증정품을 함께 확인합니다.",
+      },
+      {
+        vendor: "코리아보드게임즈",
+        category: "이벤트",
+        title: "33개 체험 테이블 · 토너먼트",
+        detail:
+          "신작 체험 테이블과 17~19일 피칭데이, 18일 스플렌더 예선, 19일 바다숲 토너먼트를 확인합니다.",
+      },
+      {
+        vendor: "MTS",
+        category: "이벤트",
+        title: "아케이드 뽑기 · 대회 본선",
+        detail:
+          "게임 체험으로 코인을 모으는 아케이드 뽑기와 에이전트 애비뉴·카르누타 대회 일정을 함께 봅니다.",
+      },
+      {
+        vendor: "보드엠",
+        category: "이벤트",
+        title: "파러웨이 챔피언십",
+        detail:
+          "7월 19일 파러웨이 챔피언십과 신작 체험, 챌린지, 뽑기 이벤트를 확인합니다.",
+      },
+      {
+        vendor: "행복한 바오밥",
+        category: "이벤트",
+        title: "정고 토너먼트 · 작가 사인회",
+        detail:
+          "정고 토너먼트, 플레이 제주 일러스트레이터 사인회와 수량별 할인 혜택을 확인합니다.",
+      },
+      {
+        vendor: "아스모디",
+        category: "이벤트",
+        title: "럭키박스 · 체험 챌린지",
+        detail:
+          "머핀타임 카드 콘테스트, 드제코 챌린지와 럭키박스·구매 개수별 추가 할인을 확인합니다.",
+      },
+      {
+        vendor: "작가존 주변",
+        category: "공간",
+        title: "메이즐링 · 캐릭터 라이선싱 페어",
+        detail:
+          "메이즐링 부스와 작가존, 캐릭터 라이선싱 페어를 연결해 소규모 창작 게임과 굿즈도 둘러봅니다.",
+      },
     ],
   },
   {
     id: "family-play",
+    case: "CASE D",
     label: "가족·체험",
-    title: "가족과 가볍게 체험하는 루트",
+    title: "아이와 함께 체험하기 좋은 루트",
     description:
-      "가족 게임과 짧은 체험작이 많은 부스를 중심으로 구성했습니다. 아이와 함께 방문하거나 입문 게임을 찾을 때 편합니다.",
+      "규칙이 짧고 손으로 바로 즐길 수 있는 게임, 가족 체험 부스와 캐릭터 공간을 연결한 동선입니다.",
     color: "#e6d92b",
     vendors: [
       "만두게임즈",
       "코리아보드게임즈",
       "보드붐",
       "조엔",
-      "놀이속의세상",
       "매직빈게임즈",
       "행복한 바오밥",
       "아스모디",
     ],
+    gameTitles: [
+      "꼬치의 달인",
+      "태플",
+      "두냐자드의 모험",
+      "새우깡 보드게임",
+      "다이스택",
+      "점핑다이스",
+      "포켓알까기",
+      "오목체스",
+      "다다다",
+      "플레이 제주",
+      "타카마치",
+      "캐치 스케치: 롤&메스",
+    ],
+    summary: [
+      {
+        vendor: "만두게임즈",
+        category: "게임",
+        title: "꼬치의 달인 · 태플",
+        detail: "짧은 시간에 규칙을 익히고 바로 웃을 수 있는 순발력·파티게임을 체험합니다.",
+      },
+      {
+        vendor: "코리아보드게임즈",
+        category: "게임",
+        title: "두냐자드의 모험 · 새우깡 보드게임",
+        detail: "협력과 가족 카드게임 중심의 공식 Pick 체험작을 확인합니다.",
+      },
+      {
+        vendor: "보드붐 · 조엔",
+        category: "게임",
+        title: "점핑다이스 · 포켓알까기",
+        detail: "주사위 쌓기와 말을 튕기는 손기술 게임으로 어린이도 바로 참여할 수 있습니다.",
+      },
+      {
+        vendor: "매직빈게임즈",
+        category: "게임",
+        title: "오목체스",
+        detail: "오목과 체스를 결합한 2인 추상전략을 체험하고 대회·현장 할인 정보도 확인합니다.",
+      },
+      {
+        vendor: "행복한 바오밥",
+        category: "게임",
+        title: "다다다 · 플레이 제주",
+        detail: "언어 협력게임과 제주 테마 가족게임을 체험하고 사인회·구매 혜택을 함께 봅니다.",
+      },
+      {
+        vendor: "아스모디",
+        category: "게임",
+        title: "타카마치 · 캐치 스케치",
+        detail: "패턴 찾기와 그림 그리기처럼 짧고 직관적인 가족게임을 확인합니다.",
+      },
+      {
+        vendor: "캐릭터 라이선싱 페어",
+        category: "공간",
+        title: "가족 휴식 · 캐릭터 관람",
+        detail: "게임 체험 사이에 캐릭터 부스와 굿즈 공간을 함께 둘러보기 좋은 지점입니다.",
+      },
+    ],
   },
-] as const;
+  {
+    id: "events-tournament",
+    case: "CASE E",
+    label: "대회·이벤트",
+    title: "현장 이벤트 시간을 따라가는 루트",
+    description:
+      "대회, 챌린지, 체험 보상과 구매 혜택이 많은 부스를 연결했습니다. 참여 시간이 정해진 프로그램부터 확인하세요.",
+    color: "#e5a72f",
+    vendors: [
+      "만두게임즈",
+      "코리아보드게임즈",
+      "데블다이스",
+      "매직빈게임즈",
+      "MTS",
+      "보드엠",
+      "행복한 바오밥",
+    ],
+    gameTitles: [
+      "카르디아",
+      "치킨vs핫도그",
+      "블러핏",
+      "데스 스테이션",
+      "데바데 빅박스",
+      "오목체스",
+      "원드러스 크리처",
+      "에이전트 애비뉴",
+      "플라워즈",
+      "P.I.",
+      "다다다",
+      "플레이 제주",
+    ],
+    summary: [
+      {
+        vendor: "만두게임즈",
+        category: "이벤트",
+        title: "카르디아 대회 · 구매 증정",
+        detail: "7월 18일 카르디아 대회와 체험 게임, 구매 수량별 증정품을 우선 확인합니다.",
+      },
+      {
+        vendor: "코리아보드게임즈",
+        category: "이벤트",
+        title: "피칭데이 · 스플렌더 · 바다숲",
+        detail: "17~19일 피칭데이, 18일 스플렌더 예선, 19일 바다숲 토너먼트 시간을 확인합니다.",
+      },
+      {
+        vendor: "데블다이스",
+        category: "이벤트",
+        title: "탠트릭스 챌린지 · 럭키드로우",
+        detail: "데바데 빅박스 공개와 함께 스피드 챌린지, 할인·구매 사은품과 럭키드로우를 확인합니다.",
+      },
+      {
+        vendor: "매직빈게임즈",
+        category: "이벤트",
+        title: "오목체스 챔피언십",
+        detail: "7월 18일 16:00–17:50 오목체스 대회와 대회 연계 50% 할인 정보를 확인합니다.",
+      },
+      {
+        vendor: "MTS",
+        category: "이벤트",
+        title: "체험 아케이드 · 대회 본선",
+        detail: "체험 코인 아케이드 뽑기와 구매 사은품, 에이전트 애비뉴·카르누타 본선을 확인합니다.",
+      },
+      {
+        vendor: "보드엠",
+        category: "이벤트",
+        title: "파러웨이 챔피언십 · 작가 사인회",
+        detail: "7월 19일 챔피언십과 부스 작가 사인회, 인증·후기 이벤트를 확인합니다.",
+      },
+      {
+        vendor: "행복한 바오밥",
+        category: "이벤트",
+        title: "정고 토너먼트 · 플레이 제주 사인회",
+        detail: "대회와 일러스트레이터 사인회, 수량별 할인과 일부 구매 증정을 함께 확인합니다.",
+      },
+    ],
+  },
+];
 
 const routeVendorId = (vendor: string) =>
   `route-vendor-${vendor.replaceAll(" ", "-")}`;
@@ -1810,9 +2060,16 @@ export default function Home() {
         .map((vendor) => ({
           vendor,
           games: games
-            .filter((game) => game.publisher === vendor)
-            .sort((a, b) => Number(Boolean(b.image)) - Number(Boolean(a.image)))
-            .slice(0, 2),
+            .filter(
+              (game) =>
+                game.publisher === vendor &&
+                activeRoute.gameTitles.some((title) => title === game.title),
+            )
+            .sort(
+              (a, b) =>
+                activeRoute.gameTitles.indexOf(a.title) -
+                activeRoute.gameTitles.indexOf(b.title),
+            ),
         }))
         .filter((group) => group.games.length > 0),
     [activeRoute],
@@ -2440,8 +2697,8 @@ export default function Home() {
                   <span className="mono">SHEET CURATED ROUTES</span>
                   <h2>내 일정에 맞는 추천 동선</h2>
                   <p>
-                    방문 목적을 고르면 추천 부스, 위치, 대표 게임을 한 번에
-                    확인할 수 있습니다.
+                    방문 목적을 고르면 추천 부스, 언급된 게임과 현장 이벤트를
+                    한 번에 확인할 수 있습니다.
                   </p>
                 </div>
                 <a
@@ -2464,7 +2721,10 @@ export default function Home() {
                     onClick={() => setActiveRouteId(route.id)}
                   >
                     <i style={{ backgroundColor: route.color }} />
-                    {route.label}
+                    <span>
+                      <small>{route.case}</small>
+                      {route.label}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -2475,7 +2735,9 @@ export default function Home() {
                     style={{ backgroundColor: activeRoute.color }}
                   />
                   <div>
-                    <p className="mono">{activeRoute.label} ROUTE</p>
+                    <p className="mono">
+                      {activeRoute.case} · {activeRoute.label}
+                    </p>
                     <h3>{activeRoute.title}</h3>
                     <p>{activeRoute.description}</p>
                     <strong>{activeRoute.vendors.length}개 추천 지점</strong>
@@ -2516,6 +2778,40 @@ export default function Home() {
                   </div>
                 </div>
               </article>
+              {activeRoute.summary.length > 0 && (
+                <section
+                  className="route-summary"
+                  aria-labelledby="route-summary-title"
+                >
+                  <header>
+                    <span className="mono">IMPORTANT STOPS</span>
+                    <h3 id="route-summary-title">
+                      {activeRoute.case} 게임·이벤트 정리
+                    </h3>
+                    <p>
+                      지도에 표시된 지점을 실제 현장에서 확인할 내용 중심으로
+                      정리했습니다.
+                    </p>
+                  </header>
+                  <div className="route-summary-table">
+                    {activeRoute.summary.map((item, index) => (
+                      <article key={`${item.vendor}-${item.title}`}>
+                        <span className="mono">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <div className="route-summary-place">
+                          <b>{item.vendor}</b>
+                          <em>{item.category}</em>
+                        </div>
+                        <div>
+                          <h4>{item.title}</h4>
+                          <p>{item.detail}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
               <div className="route-game-groups">
                 {routeGameGroups.map((group, index) => (
                   <div
