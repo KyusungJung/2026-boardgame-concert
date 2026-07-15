@@ -2181,8 +2181,14 @@ export default function Home() {
       .querySelector("#vendors")
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+  const showRoutes = () => {
+    setSelectedVendor("전체");
+    setFilter("추천 루트");
+    setVendorMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+  const closeRoutes = () => setFilter("전체");
   const selectFilter = (item: string) => {
-    if (item === "추천 루트") setSelectedVendor("전체");
     setFilter(item);
   };
   const addToWishlist = (game: Game) => {
@@ -2249,6 +2255,9 @@ export default function Home() {
         </a>
         <nav>
           <a href="#map">MAP</a>
+          <button className="nav-routes" type="button" onClick={showRoutes}>
+            추천 루트
+          </button>
           <button className="nav-event" type="button" onClick={showEvents}>
             주요 이벤트
           </button>
@@ -2507,7 +2516,6 @@ export default function Home() {
             <div className="filter-row">
               {[
                 "전체",
-                "추천 루트",
                 "이벤트",
                 "파티",
                 "가족",
@@ -2547,15 +2555,6 @@ export default function Home() {
               >
                 {vendorLinks[selectedVendor].label}
               </a>
-            )}
-            {wishlist.length > 0 && (
-              <button
-                className="wishlist-list-link"
-                type="button"
-                onClick={() => setWishlistOpen(true)}
-              >
-                구매희망 {wishlist.length}
-              </button>
             )}
           </div>
           {showEventContent && (
@@ -2701,13 +2700,18 @@ export default function Home() {
                     한 번에 확인할 수 있습니다.
                   </p>
                 </div>
-                <a
-                  href={recommendationSheetSource}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  추천 pick 시트 원문 ↗
-                </a>
+                <div className="route-heading-actions">
+                  <a
+                    href={recommendationSheetSource}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    추천 pick 시트 원문 ↗
+                  </a>
+                  <button type="button" className="route-close" onClick={closeRoutes}>
+                    닫기 ×
+                  </button>
+                </div>
               </header>
               <div className="route-tabs" role="tablist" aria-label="추천 루트 선택">
                 {recommendationRoutes.map((route) => (

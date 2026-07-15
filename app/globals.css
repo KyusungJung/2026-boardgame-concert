@@ -71,16 +71,26 @@ button {
 }
 .nav nav a,
 .nav-link,
-.nav-event {
+.nav-event,
+.nav-routes,
+.vendor-menu-trigger,
+.wishlist-header {
   font-family: var(--font-geist-mono), monospace;
   letter-spacing: 0.03em;
   font-size: 11px;
 }
-.nav-event {
+.nav-event,
+.nav-routes {
   color: var(--ink);
   background: transparent;
   border: 0;
   padding: 0;
+}
+.nav-routes:hover,
+.nav-event:hover,
+.vendor-menu-trigger:hover,
+.wishlist-header:hover {
+  color: var(--blue);
 }
 .nav-link {
   border: 1px solid var(--ink);
@@ -479,7 +489,13 @@ section {
   padding: 32px 0;
 }
 .recommendation-routes {
-  padding: 28px 0 0;
+  z-index: 9;
+  background: var(--paper);
+  padding: 36px max(4.5%, calc((100vw - 1360px) / 2)) 80px;
+  position: fixed;
+  inset: 64px 0 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .route-heading {
   border-bottom: 1px solid var(--line);
@@ -503,12 +519,31 @@ section {
   margin: 0;
   font-size: 14px;
 }
-.route-heading > a {
+.route-heading-actions {
+  align-items: center;
+  gap: 14px;
+  display: flex;
+}
+.route-heading-actions > a {
   color: var(--blue);
   white-space: nowrap;
   font:
     11px var(--font-geist-mono),
     monospace;
+}
+.route-close {
+  color: var(--ink);
+  white-space: nowrap;
+  background: #fff;
+  border: 1px solid var(--ink);
+  padding: 8px 10px;
+  font:
+    10px var(--font-geist-mono),
+    monospace;
+}
+.route-close:hover {
+  color: #fff;
+  background: var(--ink);
 }
 .route-tabs {
   gap: 8px;
@@ -1078,28 +1113,12 @@ footer div {
 .vendor-source:hover {
   text-decoration: underline;
 }
-.wishlist-list-link {
-  color: var(--ink);
-  font:
-    10px var(--font-geist-mono),
-    monospace;
-  background: #fff;
-  border: 1px solid var(--ink);
-  padding: 8px 10px;
-}
-.wishlist-list-link:hover {
-  background: var(--ink);
-  color: #fff;
-}
 @media (width<=800px) {
   .selection-row {
     flex-direction: column;
     align-items: flex-start;
   }
   .selection-row .vendor-source {
-    margin-top: -7px;
-  }
-  .wishlist-list-link {
     margin-top: -7px;
   }
 }
@@ -1726,14 +1745,14 @@ footer div {
   display: inline-grid;
 }
 .wishlist-header {
-  border: 1px solid var(--ink);
-  background: #fff;
+  border: 0;
+  background: transparent;
   color: var(--ink);
   font:
     10px var(--font-geist-mono),
     monospace;
   white-space: nowrap;
-  padding: 9px 10px;
+  padding: 0;
 }
 .wishlist-header b {
   display: inline-grid;
@@ -1745,10 +1764,6 @@ footer div {
   background: var(--blue);
   color: #fff;
   font-size: 9px;
-}
-.wishlist-header:hover {
-  background: var(--ink);
-  color: #fff;
 }
 .wishlist-add {
   border: 0;
@@ -1982,7 +1997,7 @@ footer div {
     margin-left: 3px;
   }
   .wishlist-header {
-    padding: 8px;
+    padding: 0;
   }
   .wishlist-drawer > header {
     padding: 22px 18px;
@@ -2012,7 +2027,7 @@ footer div {
     padding: 0 12px;
   }
   .nav nav {
-    gap: 0;
+    gap: 12px;
     margin-left: auto;
   }
   .nav nav > a {
@@ -2020,6 +2035,9 @@ footer div {
   }
   .nav-event {
     display: none;
+  }
+  .nav-routes {
+    white-space: nowrap;
   }
   .vendor-menu-trigger {
     white-space: nowrap;
@@ -2121,6 +2139,9 @@ footer div {
 }
 
 @media (width<=800px) {
+  .recommendation-routes {
+    padding: 24px 20px 56px;
+  }
   .filter-row {
     flex-wrap: nowrap;
     width: calc(100% + 4.5vw);
@@ -2140,9 +2161,13 @@ footer div {
   .route-heading {
     display: block;
   }
-  .route-heading > a {
+  .route-heading-actions {
+    align-items: flex-start;
+    gap: 12px;
     margin-top: 14px;
-    display: inline-block;
+  }
+  .route-heading-actions > a {
+    padding-top: 7px;
   }
   .route-tabs {
     margin-right: -4.5vw;
