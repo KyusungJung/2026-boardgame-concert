@@ -1994,7 +1994,7 @@ export default function Home() {
         <div className="hero-copy">
           <p className="mono">2026 BOARDGAMECON / SEOUL</p>
           <h1>
-            BCG26<span className="dot">.</span>
+            BGC26<span className="dot">.</span>
           </h1>
           <p className="hero-description">
             한눈에 보는 부스, 신작, 그리고
