@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 
 type Game = {
   title: string;
@@ -1621,6 +1626,12 @@ export default function Home() {
   const [wishlistSort, setWishlistSort] = useState<"priority" | "vendor">(
     "priority",
   );
+  const [draggingWishlistId, setDraggingWishlistId] = useState<string | null>(
+    null,
+  );
+  const [dragTargetWishlistId, setDragTargetWishlistId] = useState<
+    string | null
+  >(null);
   const [wishlistLoaded, setWishlistLoaded] = useState(false);
   const filtered = useMemo(
     () =>
@@ -1721,14 +1732,39 @@ export default function Home() {
       },
     ]);
   };
-  const updateWishlistPriority = (id: string, priority: number) =>
-    setWishlist((items) =>
-      items.map((item) =>
-        item.id === id
-          ? { ...item, priority: Math.max(1, priority || 1) }
-          : item,
-      ),
-    );
+  const reorderWishlist = (sourceId: string, targetId: string) => {
+    if (sourceId === targetId) return;
+    setWishlist((items) => {
+      const sorted = [...items].sort(
+        (a, b) => a.priority - b.priority || a.addedAt - b.addedAt,
+      );
+      const sourceIndex = sorted.findIndex((item) => item.id === sourceId);
+      const targetIndex = sorted.findIndex((item) => item.id === targetId);
+      if (sourceIndex < 0 || targetIndex < 0) return items;
+      const [moved] = sorted.splice(sourceIndex, 1);
+      sorted.splice(targetIndex, 0, moved);
+      return sorted.map((item, index) => ({ ...item, priority: index + 1 }));
+    });
+  };
+  const finishWishlistDrag = (sourceId: string) => {
+    if (dragTargetWishlistId) {
+      reorderWishlist(sourceId, dragTargetWishlistId);
+    }
+    setDraggingWishlistId(null);
+    setDragTargetWishlistId(null);
+  };
+  const updatePointerDragTarget = (
+    sourceId: string,
+    clientX: number,
+    clientY: number,
+  ) => {
+    const targetId = document
+      .elementFromPoint(clientX, clientY)
+      ?.closest<HTMLElement>("[data-wishlist-id]")?.dataset.wishlistId;
+    if (targetId && targetId !== sourceId) {
+      setDragTargetWishlistId(targetId);
+    }
+  };
   const removeFromWishlist = (id: string) =>
     setWishlist((items) => items.filter((item) => item.id !== id));
 
@@ -1811,7 +1847,7 @@ export default function Home() {
               </button>
             </header>
             <div className="wishlist-toolbar">
-              <p>이 기기에만 저장됩니다.</p>
+              <p>우선순위 정렬에서 ⠿ 핸들을 드래그해 순서를 바꿔보세요.</p>
               <label>
                 정렬{" "}
                 <select
@@ -1829,7 +1865,7 @@ export default function Home() {
               <div className="wishlist-empty">
                 <strong>아직 담은 게임이 없습니다.</strong>
                 <p>
-                  게임 카드의 ‘구매희망에 담기’ 버튼으로 목록을 만들어 보세요.
+                  게임 카드 제목 옆 장바구니 아이콘으로 목록을 만들어 보세요.
                 </p>
               </div>
             ) : (
@@ -1842,26 +1878,81 @@ export default function Home() {
                     </h3>
                     <ul>
                       {items.map((item) => (
-                        <li key={item.id}>
+                        <li
+                          key={item.id}
+                          data-wishlist-id={item.id}
+                          draggable={wishlistSort === "priority"}
+                          className={`${draggingWishlistId === item.id ? "dragging" : ""} ${dragTargetWishlistId === item.id ? "drag-target" : ""}`}
+                          onDragStart={() => {
+                            setWishlistSort("priority");
+                            setDraggingWishlistId(item.id);
+                            setDragTargetWishlistId(null);
+                          }}
+                          onDragOver={(event) => {
+                            event.preventDefault();
+                            if (draggingWishlistId !== item.id) {
+                              setDragTargetWishlistId(item.id);
+                            }
+                          }}
+                          onDrop={(event) => {
+                            event.preventDefault();
+                            if (draggingWishlistId) {
+                              reorderWishlist(draggingWishlistId, item.id);
+                            }
+                            setDraggingWishlistId(null);
+                            setDragTargetWishlistId(null);
+                          }}
+                          onDragEnd={() => {
+                            setDraggingWishlistId(null);
+                            setDragTargetWishlistId(null);
+                          }}
+                        >
+                          <button
+                            className="wishlist-drag-handle"
+                            type="button"
+                            aria-label={`${item.title} 구매희망 순위 드래그`}
+                            onPointerDown={(
+                              event: ReactPointerEvent<HTMLButtonElement>,
+                            ) => {
+                              event.preventDefault();
+                              setWishlistSort("priority");
+                              setDraggingWishlistId(item.id);
+                              setDragTargetWishlistId(null);
+                              event.currentTarget.setPointerCapture(
+                                event.pointerId,
+                              );
+                            }}
+                            onPointerMove={(
+                              event: ReactPointerEvent<HTMLButtonElement>,
+                            ) =>
+                              updatePointerDragTarget(
+                                item.id,
+                                event.clientX,
+                                event.clientY,
+                              )}
+                            onPointerUp={(
+                              event: ReactPointerEvent<HTMLButtonElement>,
+                            ) => {
+                              if (
+                                event.currentTarget.hasPointerCapture(
+                                  event.pointerId,
+                                )
+                              ) {
+                                event.currentTarget.releasePointerCapture(
+                                  event.pointerId,
+                                );
+                              }
+                              finishWishlistDrag(item.id);
+                            }}
+                          >
+                            ⠿
+                          </button>
                           <div>
                             <b>{item.title}</b>
-                            <span>구매희망 순위</span>
+                            <span>드래그하여 구매희망 순위 변경</span>
                           </div>
-                          <label>
-                            <input
-                              type="number"
-                              min="1"
-                              value={item.priority}
-                              onChange={(event) =>
-                                updateWishlistPriority(
-                                  item.id,
-                                  Number(event.target.value),
-                                )
-                              }
-                              aria-label={`${item.title} 구매희망 순위`}
-                            />
-                          </label>
                           <button
+                            className="wishlist-remove"
                             type="button"
                             onClick={() => removeFromWishlist(item.id)}
                             aria-label={`${item.title} 목록에서 삭제`}
