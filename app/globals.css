@@ -147,6 +147,10 @@ button {
   font-size: clamp(62px, 9.2vw, 142px);
   font-weight: 720;
   line-height: 0.86;
+  background: linear-gradient(112deg, #111 10%, #1457ff 55%, #6f9aff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .hero-description {
   letter-spacing: -0.035em;
