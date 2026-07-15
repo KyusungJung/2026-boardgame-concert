@@ -1818,6 +1818,15 @@ export default function Home() {
             </div>
           </div>
         </nav>
+        <button
+          className="wishlist-header"
+          type="button"
+          onClick={() => setWishlistOpen(true)}
+          aria-haspopup="dialog"
+          aria-label={`구매희망 게임 ${wishlist.length}개 보기`}
+        >
+          구매희망 <b>{wishlist.length}</b>
+        </button>
         <a
           className="nav-link"
           href="https://www.boardgamecon.com/"
