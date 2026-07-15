@@ -1,11 +1,25 @@
 "use client";
 
 import {
-  useEffect,
-  useMemo,
-  useState,
-  type PointerEvent as ReactPointerEvent,
-} from "react";
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  type DragEndEvent,
+  type DragStartEvent,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { useEffect, useMemo, useState } from "react";
 
 type Game = {
   title: string;
@@ -32,6 +46,77 @@ type WishlistItem = {
   priority: number;
   addedAt: number;
 };
+
+type SortableWishlistItemProps = {
+  item: WishlistItem;
+  onRemove: (id: string, title: string) => void;
+};
+
+function SortableWishlistItem({ item, onRemove }: SortableWishlistItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <li
+      ref={setNodeRef}
+      style={style}
+      className={isDragging ? "dragging" : ""}
+      data-wishlist-id={item.id}
+    >
+      <button
+        className="wishlist-drag-handle"
+        type="button"
+        aria-label={`${item.title} 구매희망 순위 드래그`}
+        {...attributes}
+        {...listeners}
+      >
+        ⠿
+      </button>
+      <div>
+        <b>{item.title}</b>
+        <span>{item.publisher}</span>
+      </div>
+      <button
+        className="wishlist-remove"
+        type="button"
+        onClick={() => onRemove(item.id, item.title)}
+        aria-label={`${item.title} 목록에서 삭제`}
+      >
+        삭제
+      </button>
+    </li>
+  );
+}
+
+function WishlistItem({ item, onRemove }: SortableWishlistItemProps) {
+  return (
+    <li data-wishlist-id={item.id}>
+      <span className="wishlist-static-spacer" aria-hidden="true" />
+      <div>
+        <b>{item.title}</b>
+        <span>{item.publisher}</span>
+      </div>
+      <button
+        className="wishlist-remove"
+        type="button"
+        onClick={() => onRemove(item.id, item.title)}
+        aria-label={`${item.title} 목록에서 삭제`}
+      >
+        삭제
+      </button>
+    </li>
+  );
+}
 
 const WISHLIST_STORAGE_KEY = "bgc26-wishlist-v1";
 const gameId = (game: Pick<Game, "title" | "publisher">) =>
@@ -1625,12 +1710,7 @@ export default function Home() {
   const [wishlistSort, setWishlistSort] = useState<"priority" | "vendor">(
     "priority",
   );
-  const [draggingWishlistId, setDraggingWishlistId] = useState<string | null>(
-    null,
-  );
-  const [dragTargetWishlistId, setDragTargetWishlistId] = useState<
-    string | null
-  >(null);
+  const [activeWishlistId, setActiveWishlistId] = useState<string | null>(null);
   const [wishlistToast, setWishlistToast] = useState<string | null>(null);
   const [wishlistLoaded, setWishlistLoaded] = useState(false);
   const filtered = useMemo(
@@ -1662,6 +1742,18 @@ export default function Home() {
         (a, b) => a.priority - b.priority || a.addedAt - b.addedAt,
       ),
     [wishlist],
+  );
+  const activeWishlistItem = useMemo(
+    () => wishlist.find((item) => item.id === activeWishlistId) ?? null,
+    [activeWishlistId, wishlist],
+  );
+  const wishlistSensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   );
   const wishlistGroups = useMemo(() => {
     const sorted = [...wishlist].sort(
@@ -1768,100 +1860,30 @@ export default function Home() {
       const sourceIndex = sorted.findIndex((item) => item.id === sourceId);
       const targetIndex = sorted.findIndex((item) => item.id === targetId);
       if (sourceIndex < 0 || targetIndex < 0) return items;
-      const [moved] = sorted.splice(sourceIndex, 1);
-      sorted.splice(targetIndex, 0, moved);
-      return sorted.map((item, index) => ({ ...item, priority: index + 1 }));
+      const reordered = arrayMove(sorted, sourceIndex, targetIndex);
+      return reordered.map((item, index) => ({ ...item, priority: index + 1 }));
     });
   };
-  const finishWishlistDrag = (sourceId: string) => {
-    if (dragTargetWishlistId) {
-      reorderWishlist(sourceId, dragTargetWishlistId);
-    }
-    setDraggingWishlistId(null);
-    setDragTargetWishlistId(null);
+  const handleWishlistDragStart = ({ active }: DragStartEvent) => {
+    setActiveWishlistId(String(active.id));
   };
-  const updatePointerDragTarget = (
-    sourceId: string,
-    clientX: number,
-    clientY: number,
-  ) => {
-    const targetId = document
-      .elementFromPoint(clientX, clientY)
-      ?.closest<HTMLElement>("[data-wishlist-id]")?.dataset.wishlistId;
-    if (targetId && targetId !== sourceId) {
-      setDragTargetWishlistId(targetId);
-    }
+  const handleWishlistDragEnd = ({ active, over }: DragEndEvent) => {
+    if (over) reorderWishlist(String(active.id), String(over.id));
+    setActiveWishlistId(null);
   };
   const removeFromWishlist = (id: string, title: string) => {
     setWishlist((items) => items.filter((item) => item.id !== id));
     setWishlistToast(`${title}을(를) 구매희망 목록에서 제거했습니다.`);
   };
   const wishlistItemRow = (item: WishlistItem) => (
-    <li
+    <SortableWishlistItem
       key={item.id}
-      data-wishlist-id={item.id}
-      draggable={wishlistSort === "priority"}
-      className={`${draggingWishlistId === item.id ? "dragging" : ""} ${dragTargetWishlistId === item.id ? "drag-target" : ""}`}
-      onDragStart={() => {
-        setWishlistSort("priority");
-        setDraggingWishlistId(item.id);
-        setDragTargetWishlistId(null);
-      }}
-      onDragOver={(event) => {
-        event.preventDefault();
-        if (draggingWishlistId !== item.id) {
-          setDragTargetWishlistId(item.id);
-        }
-      }}
-      onDrop={(event) => {
-        event.preventDefault();
-        if (draggingWishlistId) {
-          reorderWishlist(draggingWishlistId, item.id);
-        }
-        setDraggingWishlistId(null);
-        setDragTargetWishlistId(null);
-      }}
-      onDragEnd={() => {
-        setDraggingWishlistId(null);
-        setDragTargetWishlistId(null);
-      }}
-    >
-      <button
-        className="wishlist-drag-handle"
-        type="button"
-        aria-label={`${item.title} 구매희망 순위 드래그`}
-        onPointerDown={(event: ReactPointerEvent<HTMLButtonElement>) => {
-          event.preventDefault();
-          setWishlistSort("priority");
-          setDraggingWishlistId(item.id);
-          setDragTargetWishlistId(null);
-          event.currentTarget.setPointerCapture(event.pointerId);
-        }}
-        onPointerMove={(event: ReactPointerEvent<HTMLButtonElement>) =>
-          updatePointerDragTarget(item.id, event.clientX, event.clientY)
-        }
-        onPointerUp={(event: ReactPointerEvent<HTMLButtonElement>) => {
-          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-            event.currentTarget.releasePointerCapture(event.pointerId);
-          }
-          finishWishlistDrag(item.id);
-        }}
-      >
-        ⠿
-      </button>
-      <div>
-        <b>{item.title}</b>
-        <span>{item.publisher}</span>
-      </div>
-      <button
-        className="wishlist-remove"
-        type="button"
-        onClick={() => removeFromWishlist(item.id, item.title)}
-        aria-label={`${item.title} 목록에서 삭제`}
-      >
-        삭제
-      </button>
-    </li>
+      item={item}
+      onRemove={removeFromWishlist}
+    />
+  );
+  const wishlistStaticItemRow = (item: WishlistItem) => (
+    <WishlistItem key={item.id} item={item} onRemove={removeFromWishlist} />
   );
 
   return (
@@ -1977,9 +1999,32 @@ export default function Home() {
             ) : (
               <div className="wishlist-groups">
                 {wishlistSort === "priority" ? (
-                  <ul aria-label="구매희망 순위">
-                    {priorityWishlistItems.map(wishlistItemRow)}
-                  </ul>
+                  <DndContext
+                    sensors={wishlistSensors}
+                    collisionDetection={closestCenter}
+                    onDragStart={handleWishlistDragStart}
+                    onDragEnd={handleWishlistDragEnd}
+                    onDragCancel={() => setActiveWishlistId(null)}
+                  >
+                    <SortableContext
+                      items={priorityWishlistItems.map((item) => item.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <ul aria-label="구매희망 순위">
+                        {priorityWishlistItems.map(wishlistItemRow)}
+                      </ul>
+                    </SortableContext>
+                    <DragOverlay
+                      dropAnimation={{ duration: 180, easing: "ease-out" }}
+                    >
+                      {activeWishlistItem && (
+                        <div className="wishlist-drag-overlay">
+                          <b>{activeWishlistItem.title}</b>
+                          <span>{activeWishlistItem.publisher}</span>
+                        </div>
+                      )}
+                    </DragOverlay>
+                  </DndContext>
                 ) : (
                   Object.entries(wishlistGroups).map(([publisher, items]) => (
                     <section key={publisher}>
@@ -1987,7 +2032,7 @@ export default function Home() {
                         {publisher}
                         <span>{items.length} GAMES</span>
                       </h3>
-                      <ul>{items.map(wishlistItemRow)}</ul>
+                      <ul>{items.map(wishlistStaticItemRow)}</ul>
                     </section>
                   ))
                 )}
