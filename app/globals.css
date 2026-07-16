@@ -1069,11 +1069,14 @@ footer div {
   margin: 0;
 }
 .game-cards {
-  background: var(--line);
-  border-color: var(--line);
+  background: transparent;
+  border: 0;
+  gap: 14px;
 }
 .game-card {
   background: #fff;
+  border: 1px solid var(--line);
+  overflow: hidden;
 }
 .game-card.selected {
   box-shadow: inset 3px 0 var(--blue);
@@ -1119,6 +1122,9 @@ footer div {
   text-decoration: underline;
 }
 @media (width<=800px) {
+  .game-cards {
+    gap: 18px;
+  }
   .selection-row {
     flex-direction: column;
     align-items: flex-start;
