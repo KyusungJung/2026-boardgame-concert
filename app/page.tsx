@@ -2187,6 +2187,12 @@ export default function Home() {
     setVendorMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "auto" });
   };
+  const goHome = () => {
+    setSelectedVendor("전체");
+    setFilter("전체");
+    setVendorMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const closeRoutes = () => setFilter("전체");
   const selectFilter = (item: string) => {
     setFilter(item);
@@ -2250,7 +2256,15 @@ export default function Home() {
   return (
     <main>
       <header className="nav">
-        <a className="brand" href="#top">
+        <a
+          className="brand"
+          href="#top"
+          onClick={(event) => {
+            event.preventDefault();
+            goHome();
+          }}
+          aria-label="BGC26 홈으로 이동"
+        >
           BGC<span>26</span>
         </a>
         <nav>
