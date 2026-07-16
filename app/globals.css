@@ -489,20 +489,24 @@ section {
   padding: 32px 0;
 }
 .recommendation-routes {
-  z-index: 9;
+  z-index: 50;
+  border-left: 1px solid var(--ink);
   background: var(--paper);
-  padding: 36px max(4.5%, calc((100vw - 1360px) / 2)) 80px;
+  box-shadow: -8px 0 #11111114;
+  width: min(530px, 100%);
+  height: 100%;
+  padding: 0;
   position: fixed;
-  inset: 64px 0 0;
+  inset: 0 0 0 auto;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 .route-heading {
   border-bottom: 1px solid var(--line);
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-start;
   gap: 28px;
-  padding: 0 0 24px;
+  padding: 30px;
   display: flex;
 }
 .route-heading .mono {
@@ -519,31 +523,32 @@ section {
   margin: 0;
   font-size: 14px;
 }
-.route-heading-actions {
-  align-items: center;
-  gap: 14px;
-  display: flex;
-}
-.route-heading-actions > a {
+.route-source {
   color: var(--blue);
   white-space: nowrap;
   font:
     11px var(--font-geist-mono),
     monospace;
+  margin-top: 18px;
+  display: inline-block;
 }
 .route-close {
-  color: var(--ink);
-  white-space: nowrap;
-  background: #fff;
   border: 1px solid var(--ink);
-  padding: 8px 10px;
-  font:
-    10px var(--font-geist-mono),
-    monospace;
+  background: #fff;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  font-size: 25px;
+  line-height: 1;
 }
 .route-close:hover {
   color: #fff;
   background: var(--ink);
+}
+.recommendation-routes > :not(.route-heading) {
+  margin-right: 30px;
+  margin-left: 30px;
 }
 .route-tabs {
   gap: 8px;
@@ -2140,7 +2145,7 @@ footer div {
 
 @media (width<=800px) {
   .recommendation-routes {
-    padding: 24px 20px 56px;
+    border-left: 0;
   }
   .filter-row {
     flex-wrap: nowrap;
@@ -2159,15 +2164,12 @@ footer div {
     padding: 9px 13px;
   }
   .route-heading {
-    display: block;
+    gap: 16px;
+    padding: 22px 18px;
   }
-  .route-heading-actions {
-    align-items: flex-start;
-    gap: 12px;
-    margin-top: 14px;
-  }
-  .route-heading-actions > a {
-    padding-top: 7px;
+  .recommendation-routes > :not(.route-heading) {
+    margin-right: 18px;
+    margin-left: 18px;
   }
   .route-tabs {
     margin-right: -4.5vw;

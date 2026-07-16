@@ -2699,19 +2699,23 @@ export default function Home() {
                     방문 목적을 고르면 추천 부스, 언급된 게임과 현장 이벤트를
                     한 번에 확인할 수 있습니다.
                   </p>
-                </div>
-                <div className="route-heading-actions">
                   <a
+                    className="route-source"
                     href={recommendationSheetSource}
                     target="_blank"
                     rel="noreferrer"
                   >
                     추천 pick 시트 원문 ↗
                   </a>
-                  <button type="button" className="route-close" onClick={closeRoutes}>
-                    닫기 ×
-                  </button>
                 </div>
+                <button
+                  type="button"
+                  className="route-close"
+                  onClick={closeRoutes}
+                  aria-label="추천 루트 닫기"
+                >
+                  ×
+                </button>
               </header>
               <div className="route-tabs" role="tablist" aria-label="추천 루트 선택">
                 {recommendationRoutes.map((route) => (
